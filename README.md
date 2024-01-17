@@ -112,11 +112,185 @@ In this analysis, the relationship between a player's economic value (measured b
 
 In this project, we conducted a comprehensive analysis of the FIFA 21 dataset using Python and its libraries like pandas, matplotlib, and seaborn. We focused on extracting meaningful insights about the players' demographics, skills, and economic values within the game. Our analysis included cleaning and organizing the raw data, followed by various explorations such as understanding player performance across different ages and positions, and examining the correlation between players' economic values and their on-field attributes. These analyses provided a deeper understanding of the trends and dynamics in the virtual football world of FIFA 21, revealing how player characteristics like age, position, and skill attributes influence their market value and performance within the game. This project not only showcased the power of data analysis in sports analytics but also offered valuable insights into the factors that contribute to a player's success and their economic value in FIFA 21.
 
-[Click to see Python Code](https://github.com/Anish935/Anish_Portfolio/blob/main/fifa21%20codes.py)
+[View Python Code](https://github.com/Anish935/Anish_Portfolio/blob/main/fifa21%20codes.py)
 
 
 
-## 2. PROJECT_2_NAME
+## 1. NBA DRAFT ANALYSIS
+
+### Cleaning and Organising Data Set
+
+The dataset contains information about NBA players drafted in various years. 
+
+1. **Handling Missing Values**: Filled with median values or categorized as 'Unknown' for colleges.
+
+2. **Verification of Data Types**: Ensured correct data types for analysis readiness.
+
+3. **Data Integrity**: Confirmed the consistency and accuracy of the dataset.
+
+
+### Potential Areas for Insight
+
+**Trend Analysis**: 
+- **Draft Year Trends**: Analyzing the number of players drafted over the years to identify any trends or patterns.
+- **Performance Over Time**: How players' performance metrics like points per game, assists, and rebounds have evolved over the years.
+
+**Player Performance Analysis**: 
+- **Correlation Matrix**: Examining the relationships between various performance metrics such as points per game, win shares, and value over replacement.Analyzing height and weight distributions to understand the physical makeup of top players. This can also be broken down by position or skill level.
+- **Top Performers**: Identifying top players based on key metrics like points per game, win shares, etc.
+
+**Team Analysis**: 
+- **Teams' Draft Picks**: Visualization of the number of players drafted by each team.
+- **Team Performance Metrics**: Analysis of how team choices in drafts correlate with player performance metrics.
+
+**Advanced Statistical Analysis**: 
+- **Elbow Method**: Within-Cluster Sum of Squares (WCSS) to identify how many clusters can be created 
+- **Cluster Analysis**: Grouping players into clusters based on performance metrics to identify different types of players.
+
+**Draft Analysis**:
+- **Success Rate of Draft Pick**s: Analyzing how successful each draft pick is in terms of career longevity and performance.
+- **Comparison of Early vs. Late Draft Picks**: Evaluating whether early draft picks perform significantly better than later ones.
+
+  
+### Results and Findings:
+
+#### 1. Trend Analysis:
+
+**(i) Number of Players Drafted per Year**: 
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d2c6ff22-31d7-46da-8e88-7428b956aad9">
+
+This chart shows the count of players drafted each year. It appears that the number of players drafted has remained relatively consistent over the years, with slight variations. This consistency might be due to the fixed number of picks in each NBA draft.
+
+**(ii) Average Points Per Game Over the Years**: 
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/0e6fbefe-a53d-46de-92ae-0a81b7599155">
+
+The line chart displays the average points scored per game by players from each draft year. There seems to be some fluctuation in the scoring average over time. This could be influenced by various factors like changes in playing styles, the evolving skill sets of players, or the defensive strategies of different eras.
+
+
+#### 2. Player Performance Analysis
+
+**(i) Correlation Matrix**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/61bc932a-f2ac-4199-b855-cc67bdbbce8f">
+
+The heatmap shows the correlation between various performance metrics. High positive correlations are evident between certain metrics, indicating that players who excel in one area often perform well in others. For instance, points per game (PPG) is positively correlated with win shares and value over replacement, suggesting that high scorers generally contribute significantly to their teams' success.
+
+**(ii) Top Performers**
+
+**a) Top Scorers (Points Per Game)**:
+
+<img width="335" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1cb4d495-f1a3-4198-baf3-0ca49d80b472">
+
+- Kevin Durant leads with an average of 27.2 points per game.
+- LeBron James and Allen Iverson follow closely.
+- This list includes renowned players known for their scoring abilities.
+
+**b) Top Players Based on Win Shares**:
+
+<img width="322" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/3f412882-0f3c-4fd5-9f12-cfec38d21b7c">
+
+- LeBron James tops the list with 249.5 win shares, highlighting his immense contribution to team success.
+- Tim Duncan and Dirk Nowitzki also feature prominently, reflecting their impact during their careers.
+- This metric combines offensive and defensive contributions, showcasing all-around players.
+
+
+#### 3. Team Analysis 
+
+**(i) Teams' Draft Picks**
+
+**Number of Players Drafted by Each Team**:
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/805b377a-0430-47ba-9cbb-8b694e4dea68">
+
+This bar chart illustrates the total number of players each NBA team has drafted. Some teams have drafted more players than others, which could be due to various factors like team strategies, performance in seasons (affecting draft order), and trades.
+
+**(ii) Team Performance Metrics**
+
+**Average Points Per Game by Team**:
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/0fa9c920-575a-4539-ada0-058217738643">
+
+Teams like NOH (New Orleans Hornets), VAN (Vancouver Grizzlies), and CLE (Cleveland Cavaliers) lead in this metric. This indicates that these teams, historically, have selected players who tend to score more on average.
+
+
+#### 4. Advanced Statistical Analysis
+
+**(i) Elbow Method**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/2ce3569f-c2d3-4f51-8ba6-05b638275222">
+
+In the provided graph, the elbow appears to be at around 4 clusters. This suggests that increasing the number of clusters beyond 4 does not yield a significant decrease in WCSS. Therefore, 4 is likely a good choice for the number of clusters to use for this dataset, as it represents a point where we have a reasonable trade-off between the number of clusters and the within-cluster variance. 
+
+**(ii) Cluster Analysis**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/88b70408-1caf-456c-bfd3-694dfdc73571">
+
+The dataset was grouped into four clusters, representing different types of players based on their performance metrics. Here's a summary of each cluster:
+
+**Cluster 0**:
+- Points Per Game: 4.60
+- Average Total Rebounds: 2.16
+- Average Assists: 0.91
+- Win Shares: 3.82
+- This cluster likely represents role players or bench players who contribute modestly in various aspects of the game.
+
+**Cluster 1**:
+- Points Per Game: 9.44
+- Average Total Rebounds: 5.33
+- Average Assists: 1.28
+- Win Shares: 27.14
+- Players in this cluster could be considered as solid starters or key rotation players, contributing significantly, especially in scoring and rebounding.
+
+**Cluster 2**:
+- Points Per Game: 17.22
+- Average Total Rebounds: 7.13
+- Average Assists: 3.41
+- Win Shares: 96.64
+- This cluster represents star players who excel in scoring, rebounding, and assists, and have a high impact on their team’s success.
+
+**Cluster 3**:
+- Points Per Game: 12.71
+- Average Total Rebounds: 3.31
+- Average Assists: 4.02
+- Win Shares: 30.40
+- Players in this cluster are likely versatile guards or forwards, contributing significantly in assists and scoring.
+
+
+#### 5. Draft Analysis
+
+**(i) Average Win Shares by Draft Rank**:
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1ec952b8-3a58-4062-8549-1f8c740d9f7a">
+
+The line chart illustrates the average win shares across different draft ranks. There's a clear trend showing that players with lower draft ranks (meaning they were picked earlier) tend to have higher average win shares. This suggests that earlier draft picks, on average, are more successful in contributing to their team's success.
+
+**(ii) Comparison of Early vs. Late Draft Picks**:
+
+<img width="376" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/9f0b23c5-e884-4dfe-bc6d-f9380acf727b">
+
+**a) Early Picks (Ranks 1-15)**: The average win shares for early draft picks is approximately 34.14. This indicates that players chosen in the top 15 contribute significantly to their teams, which aligns with expectations as these players are often highly touted prospects.
+
+**b) Late Picks (Ranks 46-60)**: The average win shares for late draft picks is about 5.62, considerably lower than that for early picks. This reflects the common understanding that later draft picks are less likely to make a substantial impact, although there are always exceptions.
+
+The graphical representation and the calculated averages corroborate the general consensus in the NBA Draft that earlier selections are expected to perform better than later ones. It's important to note that there are many outliers and individual success stories that defy these averages, but the overall trend aligns with these findings.
+
+
+### Conclusion 
+
+In this data analysis project, we meticulously cleaned and explored an NBA draft dataset, uncovering insights into draft trends, player performance, and team strategies. We identified consistent drafting patterns, established correlations between performance metrics, and discerned the average output of players per team. Utilizing advanced statistical techniques, we clustered players into categories that suggested typical roles and analyzed draft success, confirming that early draft picks generally have more successful careers based on win shares. The project highlighted data analysis's utility in sports analytics, providing a foundation for further investigative studies and potential improvements in player evaluation and team decision-making processes.
+
+[View Python Code](https://github.com/Anish935/Project_Portfolio/blob/main/nba%20codes.ipynb)
+
+
+
+
+
+
+
+
+
 
 
 
