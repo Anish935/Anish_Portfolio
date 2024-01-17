@@ -1,0 +1,167 @@
+import numpy as np 
+import pandas as pd 
+import plotly.express as px 
+import missingno as msno 
+import os
+
+df = pd.read_csv("/Users/anish/Downloads/nbaplayersdraft.csv")
+
+# Filling numerical columns with their median values
+numerical_cols = df.select_dtypes(include=['float64']).columns
+df[numerical_cols] = df[numerical_cols].fillna(df[numerical_cols].median())
+
+# Handling missing values in 'college' (categorical column)
+# Filling missing values with a placeholder value 'Unknown'
+df['college'] = df['college'].fillna('Unknown')
+
+# Rechecking for missing values
+missing_values_updated = df.isnull().sum()
+
+# Saving the cleaned dataset to a new CSV file
+cleaned_file_path = '/Users/anish/Downloads/cleaned_nbaplayersdraft.csv'
+df.to_csv(cleaned_file_path, index=False)
+
+cleaned_file_path
+
+# Load the cleaned data for analysis
+cleaned_df = pd.read_csv(cleaned_file_path)
+
+# 1. Descriptive Statistics
+descriptive_stats = cleaned_df.describe()
+
+# 2. Distribution of players across teams
+team_distribution = cleaned_df['team'].value_counts()
+
+# 3. Trends over years in drafting
+year_trends = cleaned_df['year'].value_counts().sort_index()
+
+# 4. Top colleges for NBA players
+top_colleges = cleaned_df['college'].value_counts().head(10)
+
+descriptive_stats, team_distribution.head(), year_trends.head(), top_colleges.head()
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Setting the aesthetic style of the plots
+sns.set_style("whitegrid")
+
+# Trend Analysis
+# 1. Draft Year Trends
+plt.figure(figsize=(15, 6))
+sns.countplot(x='year', data=cleaned_df, palette='viridis')
+plt.title('Number of Players Drafted per Year')
+plt.xticks(rotation=45)
+plt.xlabel('Draft Year')
+plt.ylabel('Number of Players')
+plt.tight_layout()
+
+# 2. Performance Over Time (e.g., Points Per Game)
+plt.figure(figsize=(15, 6))
+sns.lineplot(x='year', y='points_per_game', data=cleaned_df, estimator='mean', ci=None, marker='o', color='b')
+plt.title('Average Points Per Game Over the Years')
+plt.xlabel('Draft Year')
+plt.ylabel('Average Points Per Game')
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+plt.show()
+
+# Player Performance Analysis
+
+# 1. Correlation Matrix of Performance Metrics
+performance_metrics = ['points_per_game', 'average_total_rebounds', 'average_assists', 
+                       'win_shares', 'win_shares_per_48_minutes', 'box_plus_minus', 'value_over_replacement']
+
+# Compute the correlation matrix
+corr = cleaned_df[performance_metrics].corr()
+
+# Heatmap for correlation matrix
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr, annot=True, cmap='coolwarm', linewidths=.5, fmt=".2f")
+plt.title('Correlation Matrix of Performance Metrics')
+plt.show()
+
+# 2. Identifying Top Performers in Key Metrics
+# Top 10 players based on points per game
+top_scorers = cleaned_df.nlargest(10, 'points_per_game')[['player', 'points_per_game']]
+
+# Top 10 players based on win shares
+top_win_shares = cleaned_df.nlargest(10, 'win_shares')[['player', 'win_shares']]
+
+top_scorers, top_win_shares
+
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+# Selecting features for cluster analysis
+features = ['points_per_game', 'average_total_rebounds', 'average_assists', 'win_shares']
+X = cleaned_df[features]
+
+# Standardizing the features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Determining the optimal number of clusters using the Elbow Method
+wcss = []
+for i in range(1, 11):
+    kmeans = KMeans(n_clusters=i, init='k-means++', max_iter=300, n_init=10, random_state=0)
+    kmeans.fit(X_scaled)
+    wcss.append(kmeans.inertia_)
+
+# Plotting the results of the Elbow Method
+plt.figure(figsize=(10, 6))
+plt.plot(range(1, 11), wcss, marker='o', linestyle='-', color='b')
+plt.title('Elbow Method For Optimal Number of Clusters')
+plt.xlabel('Number of Clusters')
+plt.ylabel('WCSS')
+plt.show()
+
+# Cluster Analysis
+
+# K-Means clustering with 4 clusters
+kmeans = KMeans(n_clusters=4, init='k-means++', max_iter=300, n_init=10, random_state=0)
+cluster_labels = kmeans.fit_predict(X_scaled)
+
+# Adding cluster labels to the original dataframe
+cleaned_df['Cluster'] = cluster_labels
+
+# Analyzing the clusters
+cluster_analysis = cleaned_df.groupby('Cluster')[features].mean()
+
+# Visualizing the clusters
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='points_per_game', y='win_shares', hue='Cluster', data=cleaned_df, palette='viridis')
+plt.title('Cluster Analysis of Players')
+plt.xlabel('Points Per Game')
+plt.ylabel('Win Shares')
+plt.show()
+
+# Draft Analysis
+
+# Success Rate of Draft Picks
+# Defining a success metric - for simplicity, we'll use 'win shares' as a proxy for success.
+# The higher the win shares, the more successful the draft pick.
+# We'll look at the average win shares by draft rank.
+
+# Average win shares by draft rank
+average_win_shares_by_rank = cleaned_df.groupby('rank')['win_shares'].mean()
+
+# Comparison of Early vs. Late Draft Picks
+# Early picks are generally the first 15 picks, and late picks could be considered as picks 46 to 60.
+early_picks_win_shares = cleaned_df[cleaned_df['rank'] <= 15]['win_shares'].mean()
+late_picks_win_shares = cleaned_df[cleaned_df['rank'] >= 46]['win_shares'].mean()
+
+# Plotting
+plt.figure(figsize=(15, 6))
+sns.lineplot(data=average_win_shares_by_rank, marker='o')
+plt.title('Average Win Shares by Draft Rank')
+plt.xlabel('Draft Rank')
+plt.ylabel('Average Win Shares')
+plt.show()
+
+
+
+
+
