@@ -116,7 +116,7 @@ In this project, we conducted a comprehensive analysis of the FIFA 21 dataset us
 
 
 
-## 1. NBA DRAFT ANALYSIS
+## 2. NBA DRAFT ANALYSIS
 
 ### Cleaning and Organising Data Set
 
