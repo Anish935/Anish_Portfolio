@@ -282,3 +282,763 @@ The graphical representation and the calculated averages corroborate the general
 In this data analysis project, we meticulously cleaned and explored an NBA draft dataset, uncovering insights into draft trends, player performance, and team strategies. We identified consistent drafting patterns, established correlations between performance metrics, and discerned the average output of players per team. Utilizing advanced statistical techniques, we clustered players into categories that suggested typical roles and analyzed draft success, confirming that early draft picks generally have more successful careers based on win shares. The project highlighted data analysis's utility in sports analytics, providing a foundation for further investigative studies and potential improvements in player evaluation and team decision-making processes.
 
 [View Python Code](https://github.com/Anish935/Project_Portfolio/blob/main/nba%20codes.ipynb)
+
+
+
+
+# Waze Project
+
+## Mission
+
+**The task is to develop a machine learning model to predict user churn. An accurate model will help prevent churn, improve user retention, and grow Waze’s business.**
+
+Waze’s free navigation app makes it easier for drivers around the world to get to where they want to go. Waze’s community of map editors, beta testers, translators, partners, and users helps make each drive better and safer. 
+
+Throughout this project, we'll see references to the problem-solving framework PACE. The following notebook components are labeled with the respective PACE stage: Plan, Analyze, Construct, and Execute. The PACE Stages will be repeated 4 times to train the model and enable it to achieve the best result. The PACE strategy will better equip us to complete the project in a systematic manner keeping a record of the work.
+
+## Analysis and Findings 
+
+## PACE 1
+
+Build a dataframe for the churn data. After the dataframe is complete, organize the data for the process of exploratory data analysis, and update the progress and insights. Use tools to create visuals for an executive summary to help non-technical stakeholders engage and interact with the data.
+
+### PLAN: 
+
+**1.** For EDA of the data, import the data and packages that will be most helpful, such as pandas, numpy, and matplotlib.
+
+**2.** Read in the data and store it as a dataframe object called df.
+
+### ANALYZE:
+
+**1.** Since we are interested in user churn, the `label` column is essential. Besides `label`, variables that tie to user behaviors will be the most applicable. All variables tie to user behavior except `ID`.
+
+**2.** `ID` can be dropped from the analysis since we are not interested in identifying a particular user. `ID` does not provide meaningful information about the churn (unless `ID` is assigned based on user sign-up time).
+
+**3.** To check for missing data, we can use `df.info()` and inspect the `Non-Null Count` column. The difference between the number of non-nulls and the number of rows in the data is the number of missing values for the variable.
+
+**4.** If the missing data are missing completely at random (MCAR), meaning that the reason for missingness is independent of the data values themselves, we can proceed with a complete-case analysis by removing the rows with missing values. Otherwise, we need to investigate the root cause of the missingness and make sure it won't interfere with the statistical inference and modeling.
+
+**5.** Generate summary statistics using the `describe()` method.
+
+**6.** And summary information using the `info()` method.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Waze-Project/assets/156449940/511ddb91-bd58-4996-8716-20aacba76f0e">
+
+### CONSTRUCT: 
+
+Now that we know which data columns to use, it is time to decide which data visualization makes the most sense for EDA of the Waze dataset.
+
+**1. sessions: The number of occurrences of a user opening the app during the month**
+
+<img width="428" alt="image" src="https://github.com/Anish935/Waze-Project/assets/156449940/20e1e7a3-3af7-414d-aef2-3e9ebbcb43a0">
+
+<img width="451" alt="image" src="https://github.com/Anish935/Waze-Project/assets/156449940/c9e7f2a2-819f-413b-ba32-fff70fba09f2">
+
+The `sessions` variable is a right-skewed distribution with half of the observations having 56 or fewer sessions. However, as indicated by the boxplot, some users have more than 700.
+
+
+**2. drives: An occurrence of driving at least 1 km during the month**
+
+<img width="430" alt="image" src="https://github.com/Anish935/Waze-Project/assets/156449940/78053db8-cb8c-44c6-ac94-c0dc0f162ac1">
+
+<img width="493" alt="Screenshot 2024-02-29 at 1 29 58 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/7cdd12a6-17ee-462a-a81f-8df25fde2e0e">
+
+The `drives` information follows a distribution similar to the `sessions` variable. It is right-skewed, approximately log-normal, with a median of 48. However, some drivers had over 400 drives in the last month.
+
+**3. total sessions: A model estimate of the total number of sessions since a user has onboarded**
+
+<img width="427" alt="Screenshot 2024-02-29 at 1 32 59 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/cfe2544d-87fb-4b2a-aeb0-69183d81665e">
+
+<img width="496" alt="Screenshot 2024-02-29 at 1 33 23 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/940fface-944d-400e-83b1-b8bc8822ebd8">
+
+The `total_sessions` is a right-skewed distribution. The median total number of sessions is 159.6. This is interesting information because, if the median number of sessions in the last month was 56 and the median total sessions was ~160, then it seems that a large proportion of a user's (estimated) total drives might have taken place in the last month. This is something that can be examined more closely later.
+
+**4. n_days_after_onboarding: The number of days since a user signed up for the app**
+
+<img width="425" alt="Screenshot 2024-02-29 at 1 43 00 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/aebe5dbc-7cde-4a70-a4fb-1280fb882fa6">
+
+<img width="475" alt="Screenshot 2024-02-29 at 1 45 17 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/f12b6bda-c5c3-4f40-a0d3-f5505339ef68">
+
+The total user tenure (i.e., number of days since onboarding) is a uniform distribution with values ranging from near-zero to \~3,500 (\~9.5 years).
+
+**5. driven_km_drives: Total kilometers driven during the month**
+
+<img width="426" alt="Screenshot 2024-02-29 at 1 47 51 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/90639538-9c7d-4630-86a5-88cf125447f2">
+
+<img width="486" alt="Screenshot 2024-02-29 at 1 48 15 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/48721330-5aae-4648-82ee-779af12a17da">
+
+The number of drives driven in the last month per user is a right-skewed distribution with half the users driving under 3,495 kilometers. The users in this dataset drive _a lot_. The longest distance driven in the month was over half the circumferene of the earth.
+
+**6. duration_minutes_drives: Total duration driven in minutes during the month**
+
+<img width="421" alt="Screenshot 2024-02-29 at 1 53 46 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/ba2282f6-1e36-44ee-90bd-2993ed614182">
+
+<img width="493" alt="Screenshot 2024-02-29 at 1 54 19 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/927bd3b9-4b62-4049-9dee-0c359a56739d">
+
+The `duration_minutes_drives` variable has a heavily skewed right tail. Half of the users drove less than \~1,478 minutes (\~25 hours), but some users clocked over 250 hours over the month.
+
+**7. activity_days: Number of days the users opens the app during the month**
+
+<img width="431" alt="Screenshot 2024-02-29 at 1 56 57 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/defd299d-0265-4328-8b0e-8e7ffbea6394">
+
+<img width="478" alt="Screenshot 2024-02-29 at 1 57 18 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/582f4db0-58f1-40bf-9d07-946943b47170">
+
+Within the last month, users opened the app a median of 16 times. The box plot reveals a centered distribution. The histogram shows a nearly uniform distribution of ~500 people opening the app on each count of days. However, there are ~250 people who didn't open the app at all and ~250 people who opened the app every day of the month. This distribution is noteworthy because it does not mirror the `sessions` distribution, which we might think would be closely correlated with `activity_days`.
+
+**8. driving_days: Number of days the user drives (at least 1 km) during the month**
+
+<img width="419" alt="Screenshot 2024-02-29 at 1 59 59 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/14041583-eb3a-41f7-a199-c4a33f44f667">
+
+<img width="485" alt="Screenshot 2024-02-29 at 2 00 21 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/ff2afb61-5c4d-4a9b-bb55-04572f75d27b">
+
+The number of days users drove each month is almost uniform, and it largely correlates with the number of days they opened the app that month, except the `driving_days` distribution tails off on the right.
+However, there were almost twice as many users (\~1,000 vs. \~550) who did not drive at all during the month. This might seem counterintuitive when considered together with the information from `activity_days`. That variable had \~500 users opening the app on each of most of the day counts, but there were only \~250 users who did not open the app at all during the month and ~250 users who opened the app every day. Let us flag this for further investigation later.
+
+**9. device: The type of device a user starts a session with**
+
+<img width="321" alt="Screenshot 2024-02-29 at 2 03 47 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/73e41309-5037-4d13-9a85-9b571aaf921d">
+
+There are nearly twice as many iPhone users as Android users represented in this data.
+
+**10. label: Binary target variable (“retained” vs “churned”) for if a user has churned anytime during the course of the month**
+
+<img width="420" alt="Screenshot 2024-02-29 at 2 05 01 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/af83b08d-33af-4559-a3ea-e6ab8ea4c816">
+
+Less than 18% of the users churned.
+
+**11. driving_days vs activity_days:**
+
+Because both `driving_days` and `activity_days` represent counts of days over a month and they're also closely related, we can plot them together on a single histogram. This will help to better understand how they relate to each other without having to scroll back and forth comparing histograms in two different places
+
+<img width="1057" alt="Screenshot 2024-02-29 at 2 09 15 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/91bd793c-d7f5-4eb2-96ad-0cb83ec2196c">
+
+As observed previously, this might seem counterintuitive. After all, why are there _fewer_ people who didn't use the app at all during the month and _more_ people who didn't drive at all during the month?
+
+On the other hand, it could just be illustrative of the fact that, while these variables are related to each other, they're not the same. People probably just open the app more than they use the app to drive&mdash;perhaps to check drive times or route information, to update settings, or even just by mistake.
+
+Confirm the maximum number of days for each variable&mdash;`driving_days` and `activity_days` to obtain 30 & 31 respectively. It's true. Although it's possible that not a single user drove all 31 days of the month, it's highly unlikely, considering there are 15,000 people represented in the dataset.
+One other way to check the validity of these variables is to plot a simple scatter plot with the x-axis representing one variable and the y-axis representing the other.
+
+<img width="590" alt="Screenshot 2024-02-29 at 2 12 15 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/285a9d6c-ade0-4baf-ae32-0e3a77756129">
+
+Notice that there is a theoretical limit. If you use the app to drive, then by definition it must count as a day-use as well. In other words, you cannot have more drive-days than activity-days. None of the samples in this data violate this rule, which is good.
+
+**12. Retention by Device:**
+
+Plot a histogram that has four bars&mdash;one for each device-label combination&mdash;to show how many iPhone users were retained/churned and how many Android users were retained/churned.
+
+<img width="482" alt="Screenshot 2024-02-29 at 2 14 10 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/593e6dda-05a9-4772-95a3-3b196fdf4219">
+
+The proportion of churned users to retained users is consistent between device types.
+
+**13. Churn rate per number of driving days:**
+
+<img width="1020" alt="Screenshot 2024-02-29 at 2 18 26 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/4c8cd4bc-0658-451b-8c5f-d6b99eb1cf7c">
+
+The churn rate is highest for people who didn't use Waze much during the last month. The more times they used the app, the less likely they were to churn. While 40% of the users who didn't use the app at all last month churned, nobody who used the app 30 days churned.
+This isn't surprising. If people who used the app a lot churned, it would likely indicate dissatisfaction. When people who don't use the app churn, it might be the result of dissatisfaction in the past, or it might be indicative of a lesser need for a navigational app. Maybe they moved to a city with good public transportation and don't need to drive anymore.
+
+### EXECUTE:
+
+**1.** Nearly all the variables were either very right-skewed or uniformly distributed. For the right-skewed distributions, this means that most users had values in the lower end of the range for that variable. For the uniform distributions, this means that users were generally equally likely to have values anywhere within the range for that variable.
+
+**2.** Most of the data was not problematic, and there was no indication that any single variable was completely wrong. However, several variables had highly improbable or perhaps even impossible outlying values, such as `driven_km_drives`. Some of the monthly variables also might be problematic, such as `activity_days` and `driving_days`, because one has a max value of 31 while the other has a max value of 30, indicating that data collection might not have occurred in the same month for both of these variables.
+
+**3.** Less than 18% of users churned, and \~82% were retained.
+
+**4.** Distance driven per driving day had a positive correlation with user churn. The farther a user drove on each driving day, the more likely they were to churn. On the other hand, number of driving days had a negative correlation with churn. Users who drove more days of the last month were less likely to churn.
+
+## PACE 2: 
+
+Conduct hypothesis testing on the data for the churn data. Investigate Waze's dataset to determine which hypothesis testing method best serves the data and the churn project.
+
+### PLAN:
+**1.** Research Question: Do drivers who open the application using an iPhone have the same number of drives on average as drivers who use Android devices?
+
+**2.** Import packages and libraries needed to compute descriptive statistics and conduct a hypothesis test.
+   
+### ANALYZE & CONSTRUCT: 
+**1.** Create a dictionary called `map_dictionary` that contains the class labels (`'Android'` and `'iPhone'`) for keys and the values you want to convert them to (`2` and `1`) as values.
+
+**2.** Create a new column called `device_type` that is a copy of the `device` column.
+
+**3.** Use the [`map()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html#pandas-series-map) method on the `device_type` series. Pass `map_dictionary` as its argument. Reassign the result back to the `device_type` series.
+</br></br>
+
+When we pass a dictionary to the `Series.map()` method, it will replace the data in the series where that data matches the dictionary's keys. The values that get imputed are the values of the dictionary.
+
+```
+Example:
+df['column']
+```
+
+|column |
+|  :-:       |
+| A     |
+| B     |
+| A     |
+| B     |
+
+```
+map_dictionary = {'A': 2, 'B': 1}
+df['column'] = df['column'].map(map_dictionary)
+df['column']
+```
+
+|column |
+|  :-: |
+| 2    |
+| 1    |
+| 2    |
+| 1    |
+
+Since we are interested in the relationship between device type and the number of drives. One approach is to look at the average number of drives for each device type. 
+
+<img width="244" alt="Screenshot 2024-02-29 at 4 50 45 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/14abe1c2-d4ae-432a-a843-36100361cebd">
+
+Based on the averages shown, it appears that drivers who use an iPhone device to interact with the application have a higher number of drives on average. However, this difference might arise from random sampling, rather than being a true difference in the number of drives. To assess whether the difference is statistically significant, we can conduct a hypothesis test.
+
+**Steps to Conduct a 2-Sample T-test:**
+**1.**   State the null hypothesis and the alternative hypothesis
+
+**2.**   Choose a signficance level
+
+**3.**   Find the p-value
+
+**4.**   Reject or fail to reject the null hypothesis
+
+**Note:** This is a t-test for two independent samples. This is the appropriate test since the two groups are independent (Android users vs. iPhone users).
+
+**Hypotheses:**
+
+$H_0$: There is no difference in average number of drives between drivers who use iPhone devices and drivers who use Androids.
+
+$H_A$: There is a difference in average number of drives between drivers who use iPhone devices and drivers who use Androids.
+
+Next, let us choose 5% as the significance level and proceed with a two-sample t-test.
+
+We can use the `stats.ttest_ind()` function to perform the test.
+
+1. Isolate the `drives` column for iPhone users.
+
+2. Isolate the `drives` column for Android users.
+
+3. Perform the t-test
+
+<img width="637" alt="Screenshot 2024-02-29 at 4 57 03 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/74bd35d4-f61a-4d90-8513-920ea4a37c70">
+
+**Result:** Since the p-value is larger than the chosen significance level (5%), we fail to reject the null hypothesis. We can conclude that there is **not** a statistically significant difference in the average number of drives between drivers who use iPhones and drivers who use Androids.
+
+### EXECUTE: 
+One potential next step is to explore what other factors influence the variation in the number of drives, and run additonal hypothesis tests to learn more about user behavior. Further, temporary changes in marketing or user interface for the Waze app may provide more data to investigate churn.
+
+## PACE 3
+
+We will create a binomial logistic regression model for the churn project. We'll determine the type of regression model that is needed and develop one using Waze's churn project data.
+
+### PLAN: 
+
+**Import the following packages to build a regression model:**
+
+*Packages for numerics + dataframes*
+import pandas as pd
+import numpy as np
+
+*Packages for visualization*
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+*Packages for Logistic Regression & Confusion Matrix*
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score, precision_score, \
+recall_score, f1_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.linear_model import LogisticRegression
+
+### ANALYZE:
+
+**1. `km_per_driving_day`**
+
+You know from earlier EDA that churn rate correlates with distance driven per driving day in the last month. It might be helpful to engineer a feature that captures this information.
+
+1. Create a new column in `df` called `km_per_driving_day`, which represents the mean distance driven per driving day for each user.
+
+2. Call the `describe()` method on the new column.
+
+3. Note that some values are infinite. This is the result of there being values of zero in the `driving_days` column. Pandas imputes a value of infinity in the corresponding rows of the new column because division by zero is undefined.
+   
+a) Convert these values from infinity to zero. You can use `np.inf` to refer to a value of infinity.
+
+b) Call `describe()` on the `km_per_driving_day` column to verify that it worked.
+
+<img width="338" alt="Screenshot 2024-02-29 at 7 15 16 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/5c685ce3-b198-4da6-9b8f-9dbfbb127364">
+
+**2. `professional_driver`**
+
+Create a new, binary feature called `professional_driver` that is a 1 for users who had 60 or more drives <u>**and**</u> drove on 15+ days in the last month.
+
+**Note:** The objective is to create a new feature that separates professional drivers from other drivers. In this scenario, domain knowledge and intuition are used to determine these deciding thresholds, but ultimately they are arbitrary.
+
+**3. Perform a quick inspection of the new variable:**
+
+1. Check the count of professional drivers and non-professionals
+
+2. Within each class (professional and non-professional) calculate the churn rate
+
+<img width="340" alt="Screenshot 2024-02-29 at 7 23 20 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/2614a938-363b-4d91-8638-837700941691">
+
+The churn rate for professional drivers is 7.6%, while the churn rate for non-professionals is 19.9%. This seems like it could add predictive signal to the model.
+
+### CONSTRUCT:
+
+**1. Encode Categorical Variable:**
+
+Change the data type of the `label` column to be binary. This change is needed to train a logistic regression model.
+Assign a `0` for all `retained` users.
+Assign a `1` for all `churned` users.
+Save this variable as `label2` as to not overwrite the original `label` variable.
+
+<img width="194" alt="Screenshot 2024-02-29 at 7 35 40 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/352a36d9-5d82-4ea8-a746-f7fa8a89cf7b">
+
+**2. Determine whether assumptions have been met:**
+
+The following are the assumptions for logistic regression:
+
+a) Independent observations (This refers to how the data was collected.)
+
+b) No extreme outliers
+
+c) Little to no multicollinearity among X predictors
+
+d) Linear relationship between X and the **logit** of y
+
+For the first assumption, we can assume that observations are independent for this project.
+The second assumption has already been addressed.
+The last assumptions will be verified after modeling.
+
+**3. Collinearity:**
+
+![heatmap](https://github.com/Anish935/Waze-Project/assets/156449940/ddab355f-db4e-4967-a1ab-00330e0fad94)
+
+If there are predictor variables that have a Pearson correlation coefficient value greater than the **absolute value of 0.7**, these variables are strongly multicollinear. Therefore, only one of these variables should be used in our model.
+
+If there are predictor variables that have a Pearson correlation coefficient value greater than the **absolute value of 0.7**, these variables are strongly multicollinear. Therefore, only one of these variables should be used in your model.
+
+*Which variables are multicollinear with each other?*
+
+**`sessions` and `drives`: 1.0**
+
+**`driving_days` and `activity_days`: 0.95**
+
+**4. Create dummies if neccessary:**
+
+If we have selected `device` as an X variable, we will need to create dummy variables since this variable is categorical.
+Create a new, binary column called `device2` that encodes user devices as follows:
+* `Android` -> `0`
+
+* `iPhone` -> `1`
+
+<img width="214" alt="Screenshot 2024-03-01 at 8 33 13 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/5c79cf12-80df-48c8-a49d-6bddfaa2be0c">
+
+**5. Assign predictor variables and target**
+
+To build the model we need to determine what X variables we want to include in the model to predict our target&mdash;`label2`.
+
+Drop the following variables and assign the results to `X`:
+
+a) `label` (this is the target)
+
+b) `label2` (this is the target)
+
+c) `device` (this is the non-binary-encoded categorical variable)
+
+d) `sessions` (this had high multicollinearity)
+
+e) `driving_days` (this had high multicollinearity)
+
+**Note:** `sessions` and `driving_days` were selected to be dropped, rather than `drives` and `activity_days`. The reason for this is that the features that were kept for modeling had slightly stronger correlations with the target variable than the features that were dropped.
+
+**6. Split the data**
+
+**a)** It is important to do a train test to obtain accurate predictions.  We always want to fit your model on your training set and evaluate our model on our test set to avoid data leakage.
+
+**b)** Because the target class is imbalanced (82% retained vs. 18% churned), we want to make sure that we don't get an unlucky split that over- or under-represents the frequency of the minority class. Set the function's `stratify` parameter to `y` to ensure that the minority class appears in both train and test sets in the same proportion that it does in the overall dataset.
+
+<img width="1119" alt="Screenshot 2024-03-01 at 8 37 09 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/03673ef4-998d-4b57-bb40-e50d63aa60ab">
+
+**c)** Use scikit-learn to instantiate a logistic regression model. Add the argument `penalty = None`.
+
+**d)** It is important to add `penalty = 'none'` since your predictors are unscaled.
+
+**e)** Fit the model on `X_train` and `y_train`.
+
+**f)** Call the `.coef_` attribute on the model to get the coefficients of each variable.  The coefficients are in order of how the variables are listed in the dataset.
+
+<img width="300" alt="Screenshot 2024-03-01 at 8 42 13 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/4cd6310a-8fb2-4202-8c2b-4bf2f956c722">
+
+**g)** Call the model's `intercept_` attribute to get the intercept of the model.
+
+<img width="214" alt="Screenshot 2024-03-01 at 8 43 30 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/81f1ad4b-1ae6-43dc-aa52-014f3aae59ab">
+
+**7. Check final assumptions**
+
+Verify the linear relationship between X and the estimated log odds (known as logits) by making a regplot.
+
+Call the model's `predict_proba()` method to generate the probability of response for each sample in the training data. (The training data is the argument to the method.) Assign the result to a variable called `training_probabilities`. This results in a 2-D array where each row represents a user in `X_train`. The first column is the probability of the user not churning, and the second column is the probability of the user churning.
+
+In logistic regression, the relationship between a predictor variable and the dependent variable does not need to be linear, however, the log-odds (a.k.a., logit) of the dependent variable with respect to the predictor variable should be linear. 
+
+**a)** Create a dataframe called `logit_data` that is a copy of `df`.
+
+**b)** Create a new column called `logit` in the `logit_data` dataframe. The data in this column should represent the logit for each user.
+
+<img width="615" alt="Screenshot 2024-03-01 at 8 47 06 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/294fc05e-c715-4119-b7aa-b244505a002f">
+
+### EXECUTE:
+
+**1. Results and Evaluation**
+
+**a)** If the logistic assumptions are met, the model results can be appropriately interpreted.
+Use the code block below to make predictions on the test data.
+y_preds = model.predict(X_test)
+
+**b)** Now, use the `score()` method on the model with `X_test` and `y_test` as its two arguments. The default score in scikit-learn is **accuracy**.
+
+<img width="169" alt="Screenshot 2024-03-01 at 8 49 45 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/62de939e-0f55-4375-8c16-ec77194e0b22">
+
+**2. Show results with a confusion matrix**
+
+<img width="580" alt="Screenshot 2024-03-01 at 8 50 43 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/9cd4401b-4af7-448a-a05e-fa94092cc9ba">
+
+**Classification Report:**
+
+<img width="460" alt="Screenshot 2024-03-01 at 8 52 42 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/5baf3cff-14fb-4f8f-b8fd-7b6e67da694a">
+
+The model has mediocre precision and very low recall, which means that it makes a lot of false negative predictions and fails to capture users who will churn.
+
+**3. Importance of Model's Features**
+
+<img width="741" alt="Screenshot 2024-03-01 at 8 54 45 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/1481bc1b-4a91-4424-b829-6c0987fc2916">
+
+**4. Conclusions**
+
+**a)** `activity_days` was by far the most important feature in the model. It had a negative correlation with user churn. This was not surprising, as this variable was very strongly correlated with `driving_days`, which was known from EDA to have a negative correlation with churn.
+
+**b)** In previous EDA, user churn rate increased as the values in `km_per_driving_day` increased. The correlation heatmap here in this notebook revealed this variable to have the strongest positive correlation with churn of any of the predictor variables by a relatively large margin. In the model, it was the second-least-important variable.
+
+**c)** New features could be engineered to try to generate better predictive signal, as they often do if we have domain knowledge. In the case of this model, one of the engineered features (`professional_driver`) was the third-most-predictive predictor. It could also be helpful to scale the predictor variables, and/or to reconstruct the model with different combinations of predictor variables to reduce noise from unpredictive features.
+
+**d)** It would be helpful to have drive-level information for each user (such as drive times, geographic locations, etc.). It would probably also be helpful to have more granular data to know how users interact with the app. For example, how often do they report or confirm road hazard alerts? Finally, it could be helpful to know the monthly count of unique starting and ending locations each driver inputs.
+
+## PACE 4
+
+We will create the final machine learning model for the churn project using feature engineering, two tree-based models: random forest, and XGBoost. The project will be completed through model development and evaluation 
+
+### PLAN: 
+
+**1. Ethical Considerations**
+
+**a)**   What are you being asked to do?
+> _Predict if a customer will churn or be retained._
+
+**b)**   What are the ethical implications of the model? What are the consequences of your model making errors? i.e What is the likely effect of the model when it predicts a false negative (i.e., when the model says a Waze user won't churn, but they actually will)?
+
+> _Waze will fail to take proactive measures to retain users who are likely to stop using the app. For example, Waze might proactively push an app notification to users, or send a survey to better understand user dissatisfaction._
+
+**c)** What is the likely effect of the model when it predicts a false positive (i.e., when the model says a Waze user will churn, but they actually won't)?
+> _Waze may take proactive measures to retain users who are NOT likely to churn. This may lead to an annoying or negative experience for loyal users of the app._
+
+**d)**   Do the benefits of such a model outweigh the potential problems?
+> _The proactive measueres taken by Waze might have unintended effects on users, and these effects might encourage user churn. Follow-up analysis on the effectiveness of the measures is recommended. If the measures are reasonable and effective, then the benefits will most likely outweigh the problems._
+
+
+**2. Import packages and libraries needed to build and evaluate random forest and XGBoost classification models**
+
+**3. Now read in the dataset as `df0` and inspect the first five rows**
+
+<img width="1131" alt="Screenshot 2024-03-01 at 9 17 38 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/78c3aad1-1f6d-4ae3-a8ba-abad9bee11da">
+
+### ANALYZE: 
+
+**1. Feature Engineering**
+
+To begin, create a copy of `df0` to preserve the original dataframe. Call the copy `df`.
+
+**a)** **`km_per_driving_day`**
+
+(i) Create a feature representing the mean number of kilometers driven on each driving day in the last month for each user. Add this feature as a column to `df`.
+
+(ii) Get descriptive statistics for this new feature
+
+(iii) Convert these values from infinity to zero. You can use `np.inf` to refer to a value of infinity.
+
+(iv) Call `describe()` on the `km_per_driving_day` column to verify that it worked.
+
+<img width="354" alt="Screenshot 2024-03-01 at 9 21 43 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/21c004aa-4140-4050-9479-3f4d5218b2f0">
+
+**b)** **`percent_sessions_in_last_month`**
+
+Create a new column `percent_sessions_in_last_month` that represents the percentage of each user's total sessions that were logged in their last month of use.
+
+**c)** **`professional_driver`**
+
+Create a new, binary feature called `professional_driver` that is a 1 for users who had 60 or more drives <u>**and**</u> drove on 15+ days in the last month.
+
+**Note:** The objective is to create a new feature that separates professional drivers from other drivers. In this scenario, domain knowledge and intuition are used to determine these deciding thresholds, but ultimately they are arbitrary.
+
+**d)** **`total_sessions_per_day`**
+
+Now, create a new column that represents the mean number of sessions per day _since onboarding_.
+
+**e)** **`km_per_hour`**
+
+Create a column representing the mean kilometers per hour driven in the last month.
+
+**f)** **`km_per_drive`**
+
+Create a column representing the mean number of kilometers per drive made in the last month for each user. 
+
+**g)** **`percent_of_sessions_to_favorite`**
+
+Finally, create a new column that represents the percentage of total sessions that were used to navigate to one of the users' favorite places. 
+
+This is a proxy representation for the percent of overall drives that are to a favorite place. Since total drives since onboarding are not contained in this dataset, total sessions must serve as a reasonable approximation.
+
+People whose drives to non-favorite places make up a higher percentage of their total drives might be less likely to churn, since they're making more drives to less familiar places.
+
+**2. Drop missing values**
+
+Because we know from previous EDA that there is no evidence of a non-random cause of the 700 missing values in the `label` column, and because these observations comprise less than 5% of the data, use the `dropna()` method to drop the rows that are missing this data.
+
+**3. Outliers**
+
+We know from previous EDA that many of these columns have outliers. However, tree-based models are resilient to outliers, so there is no need to make any imputations.
+
+**4. Variable Encoding**
+
+**a) Dummying features** 
+
+Because this dataset only has one remaining categorical feature (`device`), it's not necessary to use one of these special functions. we can just implement the transformation directly.
+
+Create a new, binary column called `device2` that encodes user devices as follows:
+
+* `Android` -> `0`
+* `iPhone` -> `1`
+
+**b) Target Encoding**
+
+The target variable is also categorical, since a user is labeled as either "churned" or "retained." Change the data type of the `label` column to be binary. This change is needed to train the models.
+
+Assign a `0` for all `retained` users.
+
+Assign a `1` for all `churned` users.
+
+Save this variable as `label2` so as not to overwrite the original `label` variable.
+
+**5. Feature Selection**
+
+Tree-based models can handle multicollinearity, so the only feature that can be cut is `ID`, since it doesn't contain any information relevant to churn.
+
+Note, however, that `device` won't be used simply because it's a copy of `device2`.
+
+Drop `ID` from the `df` dataframe.
+
+**6. Evaluation Metric**
+
+Before modeling, we must decide on an evaluation metric. This will depend on the class balance of the target variable and the use case of the model.
+
+First, examine the class balance of your target variable.
+
+<img width="271" alt="Screenshot 2024-03-01 at 9 39 26 AM" src="https://github.com/Anish935/Waze-Project/assets/156449940/2220b6df-125f-4ced-ba0d-27864c491cbe">
+
+Approximately 18% of the users in this dataset churned. This is an unbalanced dataset, but not extremely so. It can be modeled without any class rebalancing.
+
+Now, consider which evaluation metric is best. Remember, accuracy might not be the best gauge of performance because a model can have high accuracy on an imbalanced dataset and still fail to predict the minority class.
+
+It was already determined that the risks involved in making a false positive prediction are minimal. No one stands to get hurt, lose money, or suffer any other significant consequence if they are predicted to churn. Therefore, let us select the model based on the recall score.
+
+### CONSTRUCT:
+
+**1. Modeling workflow and model selection process**
+
+The final modeling dataset contains 14,299 samples. This is towards the lower end of what might be considered sufficient to conduct a robust model selection process, but still doable.
+
+**a)** Split the data into train/validation/test sets (60/20/20)
+
+Note that, when deciding the split ratio and whether or not to use a validation set to select a champion model, consider both how many samples will be in each data partition, and how many examples of the minority class each would therefore contain. In this case, a 60/20/20 split would result in \~2,860 samples in the validation set and the same number in the test set, of which \~18%&mdash;or 515 samples&mdash;would represent users who churn.
+
+**b)** Fit models and tune hyperparameters on the training set
+
+**c)** Perform final model selection on the validation set
+
+**d)** Assess the champion model's performance on the test set
+
+![](https://raw.githubusercontent.com/adacert/tiktok/main/optimal_model_flow_numbered.svg)
+
+**2. Split the data**
+
+Now you're ready to model. The only remaining step is to split the data into features/target variable and training/validation/test sets.
+
+**a)** Define a variable `X` that isolates the features. Remember not to use `device`.
+
+**b)** Define a variable `y` that isolates the target variable (`label2`).
+
+**c)** Split the data 80/20 into an interim training set and a test set. Don't forget to stratify the splits, and set the random state to 42.
+
+**d)** Split the interim training set 75/25 into a training set and a validation set, yielding a final ratio of 60/20/20 for training/validation/test sets. Again, don't forget to stratify the splits and set the random state.
+
+**3. Modelling**
+
+**a) Random Forest**
+
+Begin with using `GridSearchCV` to tune a random forest model.
+
+**(i)** Instantiate the random forest classifier `rf` and set the random state.
+
+**(ii)** Create a dictionary `cv_params` of any of the following hyperparameters and their corresponding values to tune. The more you tune, the better your model will fit the data, but the longer it will take.
+ - `max_depth`
+ - `max_features`
+ - `max_samples`
+ - `min_samples_leaf`
+ - `min_samples_split`
+ - `n_estimators`
+
+**(iii)** Define a set `scoring` of scoring metrics for GridSearch to capture (precision, recall, F1 score, and accuracy).
+
+**(iv)** Instantiate the `GridSearchCV` object `rf_cv`. Pass to it as arguments:
+ - estimator=`rf`
+ - param_grid=`cv_params`
+ - scoring=`scoring`
+ - cv: define the number of cross-validation folds you want (`cv=_`)
+ - refit: indicate which evaluation metric you want to use to select the model (`refit=_`)
+
+`refit` should be set to `'recall'`.<font/>
+
+**(v)** Now let us fit the model to the training data
+
+<img width="708" alt="Screenshot 2024-03-01 at 1 09 10 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/403e31e7-0897-459b-88ab-deea35a8c25f">
+
+**(vi)** Examine the best average score across all the validation folds 
+
+<img width="173" alt="Screenshot 2024-03-01 at 1 10 36 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/a5f69738-bf80-45e3-a05f-fc85f836ecd1">
+
+**(vii)** Examine the best combination of hyperparameters 
+
+<img width="216" alt="Screenshot 2024-03-01 at 1 13 23 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/dff16133-284a-46ee-95d2-1bc23c8b3a46">
+
+**(viii)** Pass the `GridSearch` object to the `make_results()` function.
+
+<img width="334" alt="Screenshot 2024-03-01 at 1 14 46 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/f2be94d7-5652-462a-8cb2-7ab4d9d06df7">
+
+Aside from the accuracy, the scores aren't that good. However, recall that when we built the logistic regression model in the last PACE the recall was \~0.09, which means that this model has 33% better recall and about the same accuracy, and it was trained on less data.
+
+**b) XGBoost**
+
+Let us try to improve your scores using an XGBoost model.
+
+**(i)** Instantiate the XGBoost classifier `xgb` and set `objective='binary:logistic'`. Also set the random state.
+
+**(ii)** Create a dictionary `cv_params` of the following hyperparameters and their corresponding values to tune:
+ - `max_depth`
+ - `min_child_weight`
+ - `learning_rate`
+ - `n_estimators`
+
+**(iii)** Define a set `scoring` of scoring metrics for grid search to capture (precision, recall, F1 score, and accuracy).
+
+**(iv)** Instantiate the `GridSearchCV` object `xgb_cv`. Pass to it as arguments:
+ - estimator=`xgb`
+ - param_grid=`cv_params`
+ - scoring=`scoring`
+ - cv: define the number of cross-validation folds you want (`cv=_`)
+ - refit: indicate which evaluation metric you want to use to select the model (`refit='recall'`)
+
+**(v)** Now fit the model to the `X_train` and `y_train` data.
+
+<img width="682" alt="Screenshot 2024-03-01 at 1 18 05 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/51cd9b27-30c1-401f-951a-de41327c45ff">
+
+**(vi)** Get the best score from the model, the best parameters, and use the `make_results()` function to output all of the scores of the model. 
+
+<img width="162" alt="Screenshot 2024-03-01 at 1 20 01 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/24f32a85-cd5c-41e3-b2a3-06edc58b2923">
+<img width="216" alt="Screenshot 2024-03-01 at 1 20 13 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/16569522-4aa9-454a-86fa-8c74c5b87cfa">
+<img width="348" alt="Screenshot 2024-03-01 at 1 20 28 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/073620a7-44da-454c-86ac-277e8e186d0a">
+
+**This model fit the data even better than the random forest model. The recall score is nearly double the recall score from the logistic regression model from the previous PACE, and it's almost 50% better than the random forest model's recall score, while maintaining a similar accuracy and precision score**
+
+**4. Model selection**
+
+Now, let us use the best random forest model and the best XGBoost model to predict on the validation data. Whichever performs better will be selected as the champion model.
+
+**a) Random Forest**
+
+<img width="336" alt="Screenshot 2024-03-01 at 1 24 34 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/ff9997d6-2375-42b8-8add-c2a7fbdce9f5">
+
+Notice that the scores went down from the training scores across all metrics, but only by very little. This means that the model did not overfit the training data.
+
+**b) XGBoost**
+
+<img width="341" alt="Screenshot 2024-03-01 at 1 25 30 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/7ad49115-77d3-4375-8cd8-84a0e7f0926e">
+
+Just like with the random forest model, the XGBoost model's validation scores were lower, but only very slightly. It is still the clear champion.
+
+### EXECUTE:
+
+**1. Use champion model to predict on test data**
+
+Now, let us use the champion model to predict on the test dataset. This is to give a final indication of how we should expect the model to perform on new future data, should we decide to use the model.
+
+<img width="353" alt="Screenshot 2024-03-01 at 1 27 45 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/6c6f7f9f-313f-4003-82aa-1069e32a1d79">
+
+The recall was exactly the same as it was on the validation data, but the precision declined notably, which caused all of the other scores to drop slightly. Nonetheless, this is stil within the acceptable range for performance discrepancy between validation and test scores.
+
+**2. Confusion Matrix**
+
+<img width="584" alt="Screenshot 2024-03-01 at 1 29 35 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/39252816-94ed-47c2-b350-6ad9d76a6dd3">
+
+The model predicted three times as many false negatives than it did false positives, and it correctly identified only 16.6% of the users who actually churned.
+
+**3. Feature Importance**
+
+Use the `plot_importance` function to inspect the most important features of your final model.
+
+<img width="807" alt="Screenshot 2024-03-01 at 1 30 43 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/5f59525e-f9c8-4ef6-9220-00b764c7cabb">
+
+The XGBoost model made more use of many of the features than did the logistic regression model from the previous course, which weighted a single feature (`activity_days`) very heavily in its final prediction.
+
+**4. Identify an optimal decision threshold**
+
+The default decision threshold for most implementations of classification algorithms&mdash;including scikit-learn's&mdash;is 0.5. This means that, in the case of the Waze models, if they predicted that a given user had a 50% probability or greater of churning, then that user was assigned a predicted value of `1`&mdash;the user was predicted to churn.
+
+<img width="598" alt="Screenshot 2024-03-01 at 1 38 55 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/39b9d7e8-d6c2-4ad5-9f5c-c9fda8a7b83a">
+
+As recall increases, precision decreases. But what if we determined that false positives aren't much of a problem? For example, in the case of this Waze project, a false positive could just mean that a user who will not actually churn gets an email and a banner notification on their phone. It's very low risk.
+
+Instead of using the default 0.5 decision threshold of the model, let us use a lower threshold 0.4:
+
+<img width="435" alt="Screenshot 2024-03-01 at 1 39 59 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/40ad4aca-55b2-499c-8f42-ebfd1adead00">
+
+The `predict_proba()` method returns a 2-D array of probabilities where each row represents a user. The first number in the row is the probability of belonging to the negative class, the second number in the row is the probability of belonging to the positive class. 
+
+We can generate new predictions based on this array of probabilities by changing the decision threshold for what is considered a positive response. For example, the we can use a different code to convert the predicted probabilities to {0, 1} predictions with a threshold of 0.4. In other words, any users who have a value ≥ 0.4 in the second column will get assigned a prediction of `1`, indicating that they churned.
+
+<img width="412" alt="Screenshot 2024-03-01 at 1 42 16 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/be83f2af-e157-4f6a-8a3a-6084e95b2e8e">
+
+Let us compare this with the results from earlier 
+
+<img width="349" alt="Screenshot 2024-03-01 at 1 42 50 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/0df180c5-7293-495f-b692-358ff2eb2649">
+
+Recall and F1 score increased significantly, while precision and accuracy decreased marginally.
+
+So, using the precision-recall curve as a guide, suppose you knew that you'd be satisfied if the model had a recall score of 0.5 and you were willing to accept the \~30% precision score that comes with it. In other words, We will be happy if the model successfully identified half of the people who will actually churn, even if it means that when the model says someone will churn, it's only correct about 30% of the time.
+
+**5. Conclusion**
+
+**a)** Splitting the data three ways means that there is less data available to train the model than splitting just two ways. However, performing model selection on a separate validation set enables testing of the champion model by itself on the test set, which gives a better estimate of future performance than splitting the data two ways and selecting a champion model by performance on the test data.
+
+**b)** Logistic regression models are easier to interpret. Because they assign coefficients to predictor variables, they reveal not only which features factored most heavily into their final predictions, but also the directionality of the weight. In other words, they tell you if each feature is positively or negatively correlated with the target in the model's final prediction.
+
+**c)** Tree-based model ensembles are often better predictors. If the most important thing is the predictive power of the model, then tree-based modeling will usually win out against logistic regression. They also require much less data cleaning and require fewer assumptions about the underlying distributions of their predictor variables, so they're easier to work with.
+
+**d)** New features could be engineered to try to generate better predictive signal, as they often do if you have domain knowledge. In the case of this model, the engineered features made up over half of the top 10 most-predictive features used by the model. It could also be helpful to reconstruct the model with different combinations of predictor variables to reduce noise from unpredictive features.
+
+[View Python Code](https://github.com/Anish935/Project_Portfolio/blob/main/waze%20code.py)
