@@ -294,7 +294,7 @@ In this data analysis project, we meticulously cleaned and explored an NBA draft
 
 
 
-# Waze Project
+# 3. Waze User Churn Rate Project
 
 ## Mission
 
