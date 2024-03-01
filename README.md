@@ -2,6 +2,10 @@
 
 ## 1. FIFA 21
 
+### Mission 
+
+The FIFA 21 analysis project employs Python, pandas for data manipulation, and Plotly for advanced visualization, meticulously dissecting player statistics to uncover strategic insights, revealing pivotal trends in attributes, demographics, and values in the virtual football realm.
+
 ### Cleaning and Organising Data Set
 
 The FIFA 21 dataset contains a wide range of information about players including their names, nationalities, positions, team affiliations, and various skill ratings. To prepare this dataset for analysis we should consider the following steps:
@@ -117,6 +121,10 @@ In this project, we conducted a comprehensive analysis of the FIFA 21 dataset us
 
 
 ## 2. NBA DRAFT ANALYSIS
+
+### Mission
+
+Our aim is to harness the analytical prowess of Python's data science libraries—Pandas for data manipulation, Seaborn for advanced visualizations, and Scikit-learn for machine learning clustering—to decode the complexities of NBA draft success and illuminate the patterns that underpin basketball excellence.
 
 ### Cleaning and Organising Data Set
 
@@ -294,7 +302,7 @@ In this data analysis project, we meticulously cleaned and explored an NBA draft
 
 Waze’s free navigation app makes it easier for drivers around the world to get to where they want to go. Waze’s community of map editors, beta testers, translators, partners, and users helps make each drive better and safer. 
 
-Throughout this project, we'll see references to the problem-solving framework PACE. The following notebook components are labeled with the respective PACE stage: Plan, Analyze, Construct, and Execute. The PACE Stages will be repeated 4 times to train the model and enable it to achieve the best result. The PACE strategy will better equip us to complete the project in a systematic manner keeping a record of the work.
+Throughout this project, we'll see references to the problem-solving framework PACE. The following notebook components are labeled with the respective PACE stage: Plan, Analyze, Construct, and Execute. The PACE Stages will be repeated 4 times to train the model and enable it to achieve the best result. The PACE strategy will better equip us to complete the project in a systematic manner keeping a record of the work. 
 
 ## Analysis and Findings 
 
