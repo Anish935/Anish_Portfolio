@@ -330,7 +330,7 @@ Build a dataframe for the churn data. After the dataframe is complete, organize 
 
 **6.** And summary information using the `info()` method.
 
-<img width="451" alt="image" src="https://github.com/Anish935/Waze-Project/assets/156449940/511ddb91-bd58-4996-8716-20aacba76f0e">
+<img width="522" alt="Screenshot 2024-03-02 at 4 58 49 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/c7f8d542-ffbc-4616-a40b-d97d49fef873">
 
 ### CONSTRUCT: 
 
