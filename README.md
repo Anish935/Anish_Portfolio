@@ -332,6 +332,31 @@ Build a dataframe for the churn data. After the dataframe is complete, organize 
 
 <img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/f0dbf197-3f1e-4720-ae9e-3f3f41fd520f">
 
+### CONSTRUCT: 
+
+Now that we know which data columns to use, it is time to decide which data visualization makes the most sense for EDA of the Waze dataset.
+
+**1. sessions: The number of occurrences of a user opening the app during the month**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/edb0b98c-ba7d-4a92-b02a-92cd4f5af5fc">
+
+The `sessions` variable is a right-skewed distribution with half of the observations having 56 or fewer sessions. However, as indicated by the boxplot, some users have more than 700.
+
+**2. drives: An occurrence of driving at least 1 km during the month**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/13b325ea-bc4b-44f9-8c1f-b6db08b5d902">
+
+The `drives` information follows a distribution similar to the `sessions` variable. It is right-skewed, approximately log-normal, with a median of 48. However, some drivers had over 400 drives in the last month.
+
+
+
+
+
+
+
+
+
+
 
 
 
