@@ -296,8 +296,44 @@ In this data analysis project, we meticulously cleaned and explored an NBA draft
 
 # 3. Waze User Churn Rate Project
 
+## Mission
+
+**The task is to develop a machine learning model to predict user churn. An accurate model will help prevent churn, improve user retention, and grow Waze’s business.**
+
+Waze’s free navigation app makes it easier for drivers around the world to get to where they want to go. Waze’s community of map editors, beta testers, translators, partners, and users helps make each drive better and safer. 
+
+Throughout this project, we'll see references to the problem-solving framework PACE. The following notebook components are labeled with the respective PACE stage: Plan, Analyze, Construct, and Execute. The PACE Stages will be repeated 4 times to train the model and enable it to achieve the best result. The PACE strategy will better equip us to complete the project in a systematic manner keeping a record of the work.
+
+## Analysis and Findings 
+
+## PACE 1
+
+Build a dataframe for the churn data. After the dataframe is complete, organize the data for the process of exploratory data analysis, and update the progress and insights. Use tools to create visuals for an executive summary to help non-technical stakeholders engage and interact with the data.
+
+### PLAN: 
+
+**1.** For EDA of the data, import the data and packages that will be most helpful, such as pandas, numpy, and matplotlib.
+
+**2.** Read in the data and store it as a dataframe object called df.
+
+### ANALYZE:
+
+**1.** Since we are interested in user churn, the `label` column is essential. Besides `label`, variables that tie to user behaviors will be the most applicable. All variables tie to user behavior except `ID`.
+
+**2.** `ID` can be dropped from the analysis since we are not interested in identifying a particular user. `ID` does not provide meaningful information about the churn (unless `ID` is assigned based on user sign-up time).
+
+**3.** To check for missing data, we can use `df.info()` and inspect the `Non-Null Count` column. The difference between the number of non-nulls and the number of rows in the data is the number of missing values for the variable.
+
+**4.** If the missing data are missing completely at random (MCAR), meaning that the reason for missingness is independent of the data values themselves, we can proceed with a complete-case analysis by removing the rows with missing values. Otherwise, we need to investigate the root cause of the missingness and make sure it won't interfere with the statistical inference and modeling.
+
+**5.** Generate summary statistics using the `describe()` method.
+
+**6.** And summary information using the `info()` method.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/f0dbf197-3f1e-4720-ae9e-3f3f41fd520f">
 
 
-**d)** New features could be engineered to try to generate better predictive signal, as they often do if you have domain knowledge. In the case of this model, the engineered features made up over half of the top 10 most-predictive features used by the model. It could also be helpful to reconstruct the model with different combinations of predictor variables to reduce noise from unpredictive features.
+
+
 
 [View Python Code](https://github.com/Anish935/Project_Portfolio/blob/main/waze%20code.py)
