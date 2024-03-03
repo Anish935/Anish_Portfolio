@@ -584,17 +584,146 @@ Create a new, binary feature called `professional_driver` that is a 1 for users 
 
 The churn rate for professional drivers is 7.6%, while the churn rate for non-professionals is 19.9%. This seems like it could add predictive signal to the model.
 
+### CONSTRUCT:
 
+**1. Encode Categorical Variable:**
 
+Change the data type of the `label` column to be binary. This change is needed to train a logistic regression model.
+Assign a `0` for all `retained` users.
+Assign a `1` for all `churned` users.
+Save this variable as `label2` as to not overwrite the original `label` variable.
 
+<img width="201" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/fc729452-078a-4109-b58f-f95b34af40b1">
 
+**2. Determine whether assumptions have been met:**
 
+The following are the assumptions for logistic regression:
 
+a) Independent observations (This refers to how the data was collected.)
 
+b) No extreme outliers
 
+c) Little to no multicollinearity among X predictors
 
+d) Linear relationship between X and the **logit** of y
 
+For the first assumption, we can assume that observations are independent for this project.
+The second assumption has already been addressed.
+The last assumptions will be verified after modeling.
 
+**3. Collinearity:**
+
+![heatmap](https://github.com/Anish935/Waze-Project/assets/156449940/ddab355f-db4e-4967-a1ab-00330e0fad94)
+
+If there are predictor variables that have a Pearson correlation coefficient value greater than the **absolute value of 0.7**, these variables are strongly multicollinear. Therefore, only one of these variables should be used in our model.
+
+If there are predictor variables that have a Pearson correlation coefficient value greater than the **absolute value of 0.7**, these variables are strongly multicollinear. Therefore, only one of these variables should be used in your model.
+
+*Which variables are multicollinear with each other?*
+
+**`sessions` and `drives`: 1.0**
+
+**`driving_days` and `activity_days`: 0.95**
+
+**4. Create dummies if neccessary:**
+
+If we have selected `device` as an X variable, we will need to create dummy variables since this variable is categorical.
+Create a new, binary column called `device2` that encodes user devices as follows:
+* `Android` -> `0`
+
+* `iPhone` -> `1`
+
+<img width="219" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/b7d6d594-3385-4b32-b918-860af3c36cd9">
+
+**5. Assign predictor variables and target**
+
+To build the model we need to determine what X variables we want to include in the model to predict our target&mdash;`label2`.
+
+Drop the following variables and assign the results to `X`:
+
+a) `label` (this is the target)
+
+b) `label2` (this is the target)
+
+c) `device` (this is the non-binary-encoded categorical variable)
+
+d) `sessions` (this had high multicollinearity)
+
+e) `driving_days` (this had high multicollinearity)
+
+**Note:** `sessions` and `driving_days` were selected to be dropped, rather than `drives` and `activity_days`. The reason for this is that the features that were kept for modeling had slightly stronger correlations with the target variable than the features that were dropped.
+
+**6. Split the data**
+
+**a)** It is important to do a train test to obtain accurate predictions.  We always want to fit your model on your training set and evaluate our model on our test set to avoid data leakage.
+
+**b)** Because the target class is imbalanced (82% retained vs. 18% churned), we want to make sure that we don't get an unlucky split that over- or under-represents the frequency of the minority class. Set the function's `stratify` parameter to `y` to ensure that the minority class appears in both train and test sets in the same proportion that it does in the overall dataset.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/deab1aed-2175-4e94-962e-4103c1abc6ee">
+
+**c)** Use scikit-learn to instantiate a logistic regression model. Add the argument `penalty = None`.
+
+**d)** It is important to add `penalty = 'none'` since your predictors are unscaled.
+
+**e)** Fit the model on `X_train` and `y_train`.
+
+**f)** Call the `.coef_` attribute on the model to get the coefficients of each variable.  The coefficients are in order of how the variables are listed in the dataset.
+
+<img width="296" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/5187726b-372e-4312-bfc4-9bc280f952bb">
+
+**g)** Call the model's `intercept_` attribute to get the intercept of the model.
+
+<img width="184" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/6d4495d4-880a-4212-a2cf-4e97a28139ea">
+
+**7. Check final assumptions**
+
+Verify the linear relationship between X and the estimated log odds (known as logits) by making a regplot.
+
+Call the model's `predict_proba()` method to generate the probability of response for each sample in the training data. (The training data is the argument to the method.) Assign the result to a variable called `training_probabilities`. This results in a 2-D array where each row represents a user in `X_train`. The first column is the probability of the user not churning, and the second column is the probability of the user churning.
+
+In logistic regression, the relationship between a predictor variable and the dependent variable does not need to be linear, however, the log-odds (a.k.a., logit) of the dependent variable with respect to the predictor variable should be linear. 
+
+**a)** Create a dataframe called `logit_data` that is a copy of `df`.
+
+**b)** Create a new column called `logit` in the `logit_data` dataframe. The data in this column should represent the logit for each user.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/8310ede6-a594-49bf-ae1e-85f4140a00d3">
+
+### EXECUTE:
+
+**1. Results and Evaluation**
+
+**a)** If the logistic assumptions are met, the model results can be appropriately interpreted.
+Use the code block below to make predictions on the test data.
+y_preds = model.predict(X_test)
+
+**b)** Now, use the `score()` method on the model with `X_test` and `y_test` as its two arguments. The default score in scikit-learn is **accuracy**.
+
+<img width="166" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/b1442062-8b69-40fe-a095-ad58fbc27e6e">
+
+**2. Show results with a confusion matrix**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/3ffe794a-b9fe-48ba-88c8-a8b3a3a55c8a">
+
+**Classification Report:**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/816075ec-c78c-439a-85d3-fd8fe1029804">
+
+The model has mediocre precision and very low recall, which means that it makes a lot of false negative predictions and fails to capture users who will churn.
+
+**3. Importance of Model's Features**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/7baa8d9d-d278-4a95-984f-788791fc83be">
+
+**4. Conclusions**
+
+**a)** `activity_days` was by far the most important feature in the model. It had a negative correlation with user churn. This was not surprising, as this variable was very strongly correlated with `driving_days`, which was known from EDA to have a negative correlation with churn.
+
+**b)** In previous EDA, user churn rate increased as the values in `km_per_driving_day` increased. The correlation heatmap here in this notebook revealed this variable to have the strongest positive correlation with churn of any of the predictor variables by a relatively large margin. In the model, it was the second-least-important variable.
+
+**c)** New features could be engineered to try to generate better predictive signal, as they often do if we have domain knowledge. In the case of this model, one of the engineered features (`professional_driver`) was the third-most-predictive predictor. It could also be helpful to scale the predictor variables, and/or to reconstruct the model with different combinations of predictor variables to reduce noise from unpredictive features.
+
+**d)** It would be helpful to have drive-level information for each user (such as drive times, geographic locations, etc.). It would probably also be helpful to have more granular data to know how users interact with the app. For example, how often do they report or confirm road hazard alerts? Finally, it could be helpful to know the monthly count of unique starting and ending locations each driver inputs.
 
 
 
