@@ -1,12 +1,10 @@
-# My Projects
+# 1. FIFA 21
 
-## 1. FIFA 21
-
-### Mission 
+## Mission 
 
 The FIFA 21 analysis project employs Python, pandas for data manipulation, and Plotly for advanced visualization, meticulously dissecting player statistics to uncover strategic insights, revealing pivotal trends in attributes, demographics, and values in the virtual football realm.
 
-### Cleaning and Organising Data Set
+## Cleaning and Organising Data Set
 
 The FIFA 21 dataset contains a wide range of information about players including their names, nationalities, positions, team affiliations, and various skill ratings. To prepare this dataset for analysis we should consider the following steps:
 
@@ -23,7 +21,7 @@ The FIFA 21 dataset contains a wide range of information about players including
 6. **Handle Columns with Mixed Types**: As indicated by the warning, at least one column has mixed data types which should be addressed.
 
 
-### Potential Areas for Insight
+## Potential Areas for Insight
 
 To draw insights from the cleaned and organized FIFA 21 dataset, we can explore various aspects of the data. Some potential areas of analysis include:
 
@@ -42,27 +40,27 @@ To draw insights from the cleaned and organized FIFA 21 dataset, we can explore 
 - **Comparison by Leagues and Teams**: Comparing different leagues and teams in terms of their players' average ratings, potential, and physical attributes.
 
   
-### Results and Findings:
+## Results and Findings:
 
-#### 1. Age Distribution of Players:
+### 1. Age Distribution of Players:
 <img width="494" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/71e4f6d4-defb-44ed-90c6-e8667c4808e4">
 
 - The age distribution shows a bell curve common in professional sports with most players in their early to mid-twenties.
 - There's a noticeable decline in the number of players as age increases indicating fewer older players in the game.
 
-#### 2. Distribution of Overall Rating
+### 2. Distribution of Overall Rating
 <img width="482" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/b22bcbe4-5fda-476b-815e-800e30ca1054">
 
 - The overall ratings are skewed towards the lower end, indicating that highly rated players (90+) are rare.
 - The majority of players have ratings between 60 and 70, highlighting the competitive nature of professional football where only a few excel to the top.
 
-#### 3. Height Distribution
+### 3. Height Distribution
 <img width="483" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/931c94cd-1fe1-4194-8619-67ffe1c8f7cb">
 
 - Player heights mostly range between 170 cm and 190 cm.
 - This distribution reflects typical heights for professional football players, with few players being extremely tall or short.
 
-#### 4. Weight Distribution
+### 4. Weight Distribution
 <img width="483" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/7cb6d16a-7edd-435f-a151-f2e00d4fac6f">
 
 - Weight distribution shows a normal distribution, with most players weighing between 70 kg and 80 kg.
@@ -70,7 +68,7 @@ To draw insights from the cleaned and organized FIFA 21 dataset, we can explore 
   
 These insights provide a basic understanding of the demographics, physical attributes, and skill levels of players in FIFA 21. Let us next explore a more in-depth analysis of the data set and the insights it provides us with!!
 
-#### 5. Value vs Wage
+### 5. Value vs Wage
 <img width="468" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/217e3cf1-3f39-4fd6-bec7-1ec8a0926ad9">
 
 The scatter plot illustrates the relationship between a player's overall rating, their release clause, and their wage in FIFA 21. Here are some key insights:
@@ -80,30 +78,30 @@ The scatter plot illustrates the relationship between a player's overall rating,
 - **High-Rating, High-Value Players**: The top right corner of the plot, where both the overall rating and release clause are high, is sparsely populated. This area represents the elite players in the game, who command both high wages and high release clauses due to their exceptional abilities.
 - **Logarithmic Scale**: The use of a logarithmic scale for the release clause highlights the exponential increase in a player's value with higher skill levels, emphasizing how elite players are valued disproportionately higher than their peers.
 
-#### 6. Position-specific Analysis 
+### 6. Position-specific Analysis 
 <img width="482" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/2449c5bd-1ae0-4525-8d5a-c97432e4aafd">
 
 - Typically, attacking positions (like strikers and wingers) may have higher average ratings, reflecting the premium on goal-scoring abilities in football.
 - Defensive positions might have lower average ratings but could excel in specific attributes like physicality or defense.
 
-#### 7. Age vs Performance 
+### 7. Age vs Performance 
 <img width="483" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/19dd8f6b-6bf2-4e9a-9d00-abc82aedc072">
 
 - Players generally peak between the ages of 27 and 32, with a gradual decline afterward.
 - Young players (under 21) often have high potential ratings, indicating their future growth in the game.
 
-#### 8. Correlation Matrix
+### 8. Correlation Matrix
 <img width="482" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/16f6af5f-c2e3-4dcc-8c42-620042cee896">
 
 - There’s likely a strong correlation between a player's overall rating and their individual attributes like pace, shooting, and passing.
 - Age might be negatively correlated with potential, as younger players generally have higher potential ratings.
 
-#### 9. Player Performance by Age and Position
+### 9. Player Performance by Age and Position
 <img width="482" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/e809f81d-99a2-4135-9229-498fdbc54a62">
 
 - This analysis investigates how average player ratings vary across different ages for various primary positions. By plotting these trends, we can identify if certain positions (like strikers or defenders) peak at different ages, which helps in understanding the career trajectories specific to each role. For instance, it might reveal that attacking players peak earlier in their careers, while goalkeepers or defenders maintain their performance levels for a longer period.
 
-#### 10. Player Value vs Economic Attribute
+### 10. Player Value vs Economic Attribute
 
 <img width="482" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/23f5be2d-8e43-4426-becd-bc13f0044caa">
 
@@ -112,7 +110,7 @@ The scatter plot illustrates the relationship between a player's overall rating,
 In this analysis, the relationship between a player's economic value (measured by release clause and wage) and key playing attributes (like pace, shooting, passing) is explored. This can illustrate which attributes are most valued in the market. For example, it might show a strong correlation between shooting ability and economic value, indicating that players with high shooting skills command higher market prices and wages. This insight is valuable for understanding what attributes drive a player's market value in the virtual economy of FIFA 21
 
 
-### Conclusion 
+## Conclusion 
 
 In this project, we conducted a comprehensive analysis of the FIFA 21 dataset using Python and its libraries like pandas, matplotlib, and seaborn. We focused on extracting meaningful insights about the players' demographics, skills, and economic values within the game. Our analysis included cleaning and organizing the raw data, followed by various explorations such as understanding player performance across different ages and positions, and examining the correlation between players' economic values and their on-field attributes. These analyses provided a deeper understanding of the trends and dynamics in the virtual football world of FIFA 21, revealing how player characteristics like age, position, and skill attributes influence their market value and performance within the game. This project not only showcased the power of data analysis in sports analytics but also offered valuable insights into the factors that contribute to a player's success and their economic value in FIFA 21.
 
@@ -120,13 +118,13 @@ In this project, we conducted a comprehensive analysis of the FIFA 21 dataset us
 
 
 
-## 2. NBA DRAFT ANALYSIS
+# 2. NBA DRAFT ANALYSIS
 
-### Mission
+## Mission
 
 Our aim is to harness the analytical prowess of Python's data science libraries—Pandas for data manipulation, Seaborn for advanced visualizations, and Scikit-learn for machine learning clustering—to decode the complexities of NBA draft success and illuminate the patterns that underpin basketball excellence.
 
-### Cleaning and Organising Data Set
+## Cleaning and Organising Data Set
 
 The dataset contains information about NBA players drafted in various years. 
 
@@ -137,7 +135,7 @@ The dataset contains information about NBA players drafted in various years.
 3. **Data Integrity**: Confirmed the consistency and accuracy of the dataset.
 
 
-### Potential Areas for Insight
+## Potential Areas for Insight
 
 **Trend Analysis**: 
 - **Draft Year Trends**: Analyzing the number of players drafted over the years to identify any trends or patterns.
@@ -160,9 +158,9 @@ The dataset contains information about NBA players drafted in various years.
 - **Comparison of Early vs. Late Draft Picks**: Evaluating whether early draft picks perform significantly better than later ones.
 
   
-### Results and Findings:
+## Results and Findings:
 
-#### 1. Trend Analysis:
+### 1. Trend Analysis:
 
 **(i) Number of Players Drafted per Year**: 
 
@@ -177,7 +175,7 @@ This chart shows the count of players drafted each year. It appears that the num
 The line chart displays the average points scored per game by players from each draft year. There seems to be some fluctuation in the scoring average over time. This could be influenced by various factors like changes in playing styles, the evolving skill sets of players, or the defensive strategies of different eras.
 
 
-#### 2. Player Performance Analysis
+### 2. Player Performance Analysis
 
 **(i) Correlation Matrix**
 
@@ -204,7 +202,7 @@ The heatmap shows the correlation between various performance metrics. High posi
 - This metric combines offensive and defensive contributions, showcasing all-around players.
 
 
-#### 3. Team Analysis 
+### 3. Team Analysis 
 
 **(i) Teams' Draft Picks**
 
@@ -223,7 +221,7 @@ This bar chart illustrates the total number of players each NBA team has drafted
 Teams like NOH (New Orleans Hornets), VAN (Vancouver Grizzlies), and CLE (Cleveland Cavaliers) lead in this metric. This indicates that these teams, historically, have selected players who tend to score more on average.
 
 
-#### 4. Advanced Statistical Analysis
+### 4. Advanced Statistical Analysis
 
 **(i) Elbow Method**
 
@@ -266,7 +264,7 @@ The dataset was grouped into four clusters, representing different types of play
 - Players in this cluster are likely versatile guards or forwards, contributing significantly in assists and scoring.
 
 
-#### 5. Draft Analysis
+### 5. Draft Analysis
 
 **(i) Average Win Shares by Draft Rank**:
 
@@ -285,7 +283,7 @@ The line chart illustrates the average win shares across different draft ranks. 
 The graphical representation and the calculated averages corroborate the general consensus in the NBA Draft that earlier selections are expected to perform better than later ones. It's important to note that there are many outliers and individual success stories that defy these averages, but the overall trend aligns with these findings.
 
 
-### Conclusion 
+## Conclusion 
 
 In this data analysis project, we meticulously cleaned and explored an NBA draft dataset, uncovering insights into draft trends, player performance, and team strategies. We identified consistent drafting patterns, established correlations between performance metrics, and discerned the average output of players per team. Utilizing advanced statistical techniques, we clustered players into categories that suggested typical roles and analyzed draft success, confirming that early draft picks generally have more successful careers based on win shares. The project highlighted data analysis's utility in sports analytics, providing a foundation for further investigative studies and potential improvements in player evaluation and team decision-making processes.
 
@@ -294,7 +292,7 @@ In this data analysis project, we meticulously cleaned and explored an NBA draft
 
 
 
-# 3. Waze User Churn Rate Project
+# 3. Waze Project
 
 ## Mission
 
@@ -303,8 +301,6 @@ In this data analysis project, we meticulously cleaned and explored an NBA draft
 Waze’s free navigation app makes it easier for drivers around the world to get to where they want to go. Waze’s community of map editors, beta testers, translators, partners, and users helps make each drive better and safer. 
 
 Throughout this project, we'll see references to the problem-solving framework PACE. The following notebook components are labeled with the respective PACE stage: Plan, Analyze, Construct, and Execute. The PACE Stages will be repeated 4 times to train the model and enable it to achieve the best result. The PACE strategy will better equip us to complete the project in a systematic manner keeping a record of the work.
-
-## Analysis and Findings 
 
 ## PACE 1
 
@@ -1143,9 +1139,63 @@ The proportions are maintained even at these higher tip amounts, with the except
 
 Examine the unique values in the `passenger_count` column.
 
-<img width="218" alt="Screenshot 2024-03-03 at 11 40 25 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/80636f77-5855-49ac-9c9b-9f8651ee6d54">
+<img width="307" alt="Screenshot 2024-03-03 at 12 12 41 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/340edfac-3c42-40a6-8d82-a543a869547d">
 
 Nearly two thirds of the rides were single occupancy, though there were still nearly 700 rides with as many as six passengers. Also, there are 33 rides with an occupancy count of zero, which doesn't make sense. These would likely be dropped unless a reasonable explanation can be found for them.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/9b7a2374-ef71-47b3-9d6a-0aa6c124d58e">
+
+Mean tip amount varies very little by passenger count. Although it does drop noticeably for four-passenger rides, it's expected that there would be a higher degree of fluctuation because rides with four passengers were the least plentiful in the dataset (aside from rides with zero passengers).
+
+**f) Create month and day columns**
+
+<img width="755" alt="Screenshot 2024-03-03 at 12 16 08 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/0b97a8f1-6f10-4640-98de-eef47d34f407">
+
+Monthly rides are fairly consistent, with notable dips in the summer months of July, August, and September, and also in February.
+
+<img width="750" alt="Screenshot 2024-03-03 at 12 16 46 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/4d4cfca4-04c4-40de-95db-6227505578a1">
+
+Suprisingly, Wednesday through Saturday had the highest number of daily rides, while Sunday and Monday had the least.
+
+<img width="757" alt="Screenshot 2024-03-03 at 12 17 26 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/2c748905-bcbf-48d2-9447-8df9fbba1820">
+
+Thursday had the highest gross revenue of all days, and Sunday and Monday had the least. Interestingly, although Saturday had only 35 fewer rides than Thursday, its gross revenue was ~$6,000 less than Thursday's&mdash;more than a 10% drop.
+
+<img width="757" alt="Screenshot 2024-03-03 at 12 18 02 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d2fefdbc-2ded-4112-a088-926018714466">
+
+Monthly revenue generally follows the pattern of monthly rides, with noticeable dips in the summer months of July, August, and September, and also one in February.
+
+**g)** **Plot mean trip distance by drop-off location**
+
+<img width="843" alt="Screenshot 2024-03-03 at 12 19 14 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/61effe60-3dd0-45ec-ae03-c0b265b1928c">
+
+This plot presents a characteristic curve related to the cumulative density function of a normal distribution. In other words, it indicates that the drop-off points are relatively evenly distributed over the terrain. This is good to know, because geographic coordinates were not included in this dataset, so there was no obvious way to test for the distibution of locations. 
+
+To confirm this conclusion, consider the following experiment:
+
+**(i)** Create a sample of coordinates from a normal distribution&mdash;in this case 1,500 pairs of points from a normal distribution with a mean of 10 and a standard deviation of 5
+
+**(ii)** Calculate the distance between each pair of coordinates 
+
+**(iii)** Group the coordinates by endpoint and calculate the mean distance between that endpoint and all other points it was paired with
+
+**(iv)** Plot the mean distance for each unique endpoint
+
+<img width="849" alt="Screenshot 2024-03-03 at 12 21 06 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/4147bb33-b5e7-4416-a6af-33136c20d2ae">
+
+The curve described by this graph is nearly identical to that of the mean distance traveled by each taxi ride to each drop-off location. This reveals that the drop-off locations in the taxi dataset are evenly distributed geographically. Note, however, that this does *not* mean that there was an even distrubtion of *rides* to each drop-off point. Let us examine this next.
+
+**h)** **Histogram of rides by drop-off location**
+
+<img width="964" alt="Screenshot 2024-03-03 at 12 22 20 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/4d4ed68e-ce56-40b6-859c-a61942830656">
+
+Notice that out of the 200+ drop-off locations, a disproportionate number of locations receive the majority of the traffic, while all the rest get relatively few trips. It's likely that these high-traffic locations are near popular tourist attractions like the Empire State Building or Times Square, airports, and train and bus terminals. However, it would be helpful to know the location that each ID corresponds with. Unfortunately, this is not in the data.
+
+### EXECUTE:
+
+
+
+
 
 
 
