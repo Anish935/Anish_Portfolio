@@ -1046,3 +1046,113 @@ So, using the precision-recall curve as a guide, suppose you knew that you'd be 
 
 [View Python Code](https://github.com/Anish935/Project_Portfolio/blob/main/waze%20code.py)
 
+
+# New York TLC Project
+
+## Mission
+
+**Predicting Taxi Gratuities in New York City**
+
+The goal of this project is to create a multiple linear regression and random forest model to predict high rider gratuity or not. This project will utilize yellow taxi trips taken in New York City during 2017. We will start off by conducting EDA on the provided data set. We will then prepare, create, and analyze A/B tests. The A/B test results should aim to find ways to generate more revenue for taxi cab drivers. Next, we will build a multiple linear regression model as it allows us to consider more than one variable against the variable we're measuring against. This opens the door for much more thorough and flexible analysis to be completed. Finally, we will build a machine learning model to predict if a customer will not leave a tip. They want to use the model in an app that will alert taxi drivers to customers who are unlikely to tip, since drivers depend on tips. 
+
+Throughout this project, we'll see references to the problem-solving framework PACE. The following notebook components are labeled with the respective PACE stage: Plan, Analyze, Construct, and Execute. The PACE Stages will be repeated 4 times to train the model and enable it to achieve the best result. The PACE strategy will better equip us to complete the project in a systematic manner keeping a record of the work.
+
+## PACE 1
+
+### PLAN:
+
+For EDA of the data, import the data and packages that would be most helpful, such as pandas, numpy and matplotlib. Then, import the dataset.
+
+### ANALYZE:
+
+**1.** Decide which columns are applicable
+
+**2.** Consider functions that help you understand and structure the data. 
+
+*    `head()`
+*    `describe()`
+*    `info()`
+*    `groupby()`
+*    `sortby()`
+
+<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/ec1139d6-1c3c-474c-84f4-67d02536404f">
+
+**3.** Use the size, describe, and info function to better understand the data and make sure there are no missing values 
+
+<img width="73" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/ee14ba9b-90c9-4842-b52c-5841f95b1cd1">
+
+<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/6162c9ed-ea49-4ed9-a21c-311bf60f58e0">
+
+<img width="440" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/4b8d56a6-91c2-4609-8fb0-e3a2b2c45cd6">
+
+There is no missing data according to the results from the `info()` function. 
+
+**4** Select data visualization types that will help you understand and explain the data.
+
+* Line graph
+* Bar chart
+* Box plot
+* Histogram
+* Heat map
+* Scatter plot
+* A geographic map
+
+### CONSTRUCT:
+
+**1. Box Plots**
+
+Perform a check for outliers on relevant columns such as trip distance and trip duration. Remember, some of the best ways to identify the presence of outliers in data are box plots and histograms. 
+
+**a)** **trip_distance**
+
+<img width="421" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/f41d0b09-a239-4093-9d93-fa0671c543de">
+
+<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/59006b29-4556-4889-b672-f385ebfb73c3">
+
+The majority of trips were journeys of less than two miles. The number of trips falls away steeply as the distance traveled increases beyond two miles.
+
+**b)** **total_amount**
+
+<img width="424" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/8a73c90b-c463-4dd0-b50c-93f6d1edb806">
+
+<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/5259488d-6f48-4bf9-8e1e-4124054503e1">
+
+The total cost of each trip also has a distribution that skews right, with most costs falling in the $5-15 range.
+
+**c)** **tip_amount**
+
+<img width="423" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/6cb02359-11b2-497f-85c9-e8910c3816ae">
+
+<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/18f3a100-4cee-4cf1-baa6-f83e55ddeb2c">
+
+The distribution for tip amount is right-skewed, with nearly all the tips in the $0-3 range.
+
+**d)** **tip_amount by vendor**
+
+<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/3a700b36-b5e3-4b7d-bc37-fb370d2f7628">
+
+Separating the tip amount by vendor reveals that there are no noticeable aberrations in the distribution of tips between the two vendors in the dataset. Vendor two has a slightly higher share of the rides, and this proportion is approximately maintained for all tip amounts.
+
+Next, zoom in on the upper end of the range of tips to check whether vendor one gets noticeably more of the most generous tips.
+
+<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/e8c2195e-db42-4ace-8faf-e1c6a2908616">
+
+The proportions are maintained even at these higher tip amounts, with the exception being at highest extremity, but this is not noteworthy due to the low sample size at these tip amounts.
+
+**e)** **Mean tips by passenger count**
+
+Examine the unique values in the `passenger_count` column.
+
+<img width="303" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/0f53ca8c-a61e-4056-a40d-1e97480ad52a">
+
+Nearly two thirds of the rides were single occupancy, though there were still nearly 700 rides with as many as six passengers. Also, there are 33 rides with an occupancy count of zero, which doesn't make sense. These would likely be dropped unless a reasonable explanation can be found for them.
+
+
+
+
+
+
+
+
+
+
