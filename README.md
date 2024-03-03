@@ -429,6 +429,167 @@ The proportion of churned users to retained users is consistent between device t
 The churn rate is highest for people who didn't use Waze much during the last month. The more times they used the app, the less likely they were to churn. While 40% of the users who didn't use the app at all last month churned, nobody who used the app 30 days churned.
 This isn't surprising. If people who used the app a lot churned, it would likely indicate dissatisfaction. When people who don't use the app churn, it might be the result of dissatisfaction in the past, or it might be indicative of a lesser need for a navigational app. Maybe they moved to a city with good public transportation and don't need to drive anymore.
 
+### EXECUTE:
+
+**1.** Nearly all the variables were either very right-skewed or uniformly distributed. For the right-skewed distributions, this means that most users had values in the lower end of the range for that variable. For the uniform distributions, this means that users were generally equally likely to have values anywhere within the range for that variable.
+
+**2.** Most of the data was not problematic, and there was no indication that any single variable was completely wrong. However, several variables had highly improbable or perhaps even impossible outlying values, such as `driven_km_drives`. Some of the monthly variables also might be problematic, such as `activity_days` and `driving_days`, because one has a max value of 31 while the other has a max value of 30, indicating that data collection might not have occurred in the same month for both of these variables.
+
+**3.** Less than 18% of users churned, and \~82% were retained.
+
+**4.** Distance driven per driving day had a positive correlation with user churn. The farther a user drove on each driving day, the more likely they were to churn. On the other hand, number of driving days had a negative correlation with churn. Users who drove more days of the last month were less likely to churn.
+
+
+## PACE 2: 
+
+Conduct hypothesis testing on the data for the churn data. Investigate Waze's dataset to determine which hypothesis testing method best serves the data and the churn project.
+
+### PLAN:
+
+**1.** Research Question: Do drivers who open the application using an iPhone have the same number of drives on average as drivers who use Android devices?
+
+**2.** Import packages and libraries needed to compute descriptive statistics and conduct a hypothesis test.
+   
+### ANALYZE & CONSTRUCT: 
+
+**1.** Create a dictionary called `map_dictionary` that contains the class labels (`'Android'` and `'iPhone'`) for keys and the values you want to convert them to (`2` and `1`) as values.
+
+**2.** Create a new column called `device_type` that is a copy of the `device` column.
+
+**3.** Use the [`map()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html#pandas-series-map) method on the `device_type` series. Pass `map_dictionary` as its argument. Reassign the result back to the `device_type` series.
+</br></br>
+
+When we pass a dictionary to the `Series.map()` method, it will replace the data in the series where that data matches the dictionary's keys. The values that get imputed are the values of the dictionary.
+
+```
+Example:
+df['column']
+```
+
+|column |
+|  :-:       |
+| A     |
+| B     |
+| A     |
+| B     |
+
+```
+map_dictionary = {'A': 2, 'B': 1}
+df['column'] = df['column'].map(map_dictionary)
+df['column']
+```
+
+|column |
+|  :-: |
+| 2    |
+| 1    |
+| 2    |
+| 1    |
+
+Since we are interested in the relationship between device type and the number of drives. One approach is to look at the average number of drives for each device type. 
+
+<img width="245" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/633515f8-94be-437f-aadd-c8c1a959a4a4">
+
+Based on the averages shown, it appears that drivers who use an iPhone device to interact with the application have a higher number of drives on average. However, this difference might arise from random sampling, rather than being a true difference in the number of drives. To assess whether the difference is statistically significant, we can conduct a hypothesis test.
+
+**Steps to Conduct a 2-Sample T-test:**
+
+**1.**   State the null hypothesis and the alternative hypothesis
+
+**2.**   Choose a signficance level
+
+**3.**   Find the p-value
+
+**4.**   Reject or fail to reject the null hypothesis
+
+**Note:** This is a t-test for two independent samples. This is the appropriate test since the two groups are independent (Android users vs. iPhone users).
+
+**Hypotheses:**
+
+$H_0$: There is no difference in average number of drives between drivers who use iPhone devices and drivers who use Androids.
+
+$H_A$: There is a difference in average number of drives between drivers who use iPhone devices and drivers who use Androids.
+
+Next, let us choose 5% as the significance level and proceed with a two-sample t-test.
+
+We can use the `stats.ttest_ind()` function to perform the test.
+
+1. Isolate the `drives` column for iPhone users.
+
+2. Isolate the `drives` column for Android users.
+
+3. Perform the t-test
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/0a17a3bd-5e80-450e-acc7-4449b736ff5e">
+
+**Result:** Since the p-value is larger than the chosen significance level (5%), we fail to reject the null hypothesis. We can conclude that there is **not** a statistically significant difference in the average number of drives between drivers who use iPhones and drivers who use Androids.
+
+### EXECUTE: 
+One potential next step is to explore what other factors influence the variation in the number of drives, and run additonal hypothesis tests to learn more about user behavior. Further, temporary changes in marketing or user interface for the Waze app may provide more data to investigate churn.
+
+## PACE 3
+
+We will create a binomial logistic regression model for the churn project. We'll determine the type of regression model that is needed and develop one using Waze's churn project data.
+
+### PLAN: 
+
+**Import the following packages to build a regression model:**
+
+*Packages for numerics + dataframes*
+import pandas as pd
+import numpy as np
+
+*Packages for visualization*
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+*Packages for Logistic Regression & Confusion Matrix*
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, accuracy_score, precision_score, \
+recall_score, f1_score, confusion_matrix, ConfusionMatrixDisplay
+from sklearn.linear_model import LogisticRegression
+
+### ANALYZE:
+
+**1. `km_per_driving_day`**
+
+You know from earlier EDA that churn rate correlates with distance driven per driving day in the last month. It might be helpful to engineer a feature that captures this information.
+
+1. Create a new column in `df` called `km_per_driving_day`, which represents the mean distance driven per driving day for each user.
+
+2. Call the `describe()` method on the new column.
+
+3. Note that some values are infinite. This is the result of there being values of zero in the `driving_days` column. Pandas imputes a value of infinity in the corresponding rows of the new column because division by zero is undefined.
+   
+a) Convert these values from infinity to zero. You can use `np.inf` to refer to a value of infinity.
+
+b) Call `describe()` on the `km_per_driving_day` column to verify that it worked.
+
+<img width="333" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/8467083e-414c-429f-a474-85ea1235c73f">
+
+**2. `professional_driver`**
+
+Create a new, binary feature called `professional_driver` that is a 1 for users who had 60 or more drives <u>**and**</u> drove on 15+ days in the last month.
+
+**Note:** The objective is to create a new feature that separates professional drivers from other drivers. In this scenario, domain knowledge and intuition are used to determine these deciding thresholds, but ultimately they are arbitrary.
+
+**3. Perform a quick inspection of the new variable:**
+
+1. Check the count of professional drivers and non-professionals
+
+2. Within each class (professional and non-professional) calculate the churn rate
+
+<img width="335" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/64e05abe-a690-4560-9c13-365aacd893ef">
+
+The churn rate for professional drivers is 7.6%, while the churn rate for non-professionals is 19.9%. This seems like it could add predictive signal to the model.
+
+
+
+
+
+
+
 
 
 
