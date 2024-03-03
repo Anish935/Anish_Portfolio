@@ -1406,6 +1406,98 @@ This model will predict `fare_amount`, which will be used as a predictor variabl
 
 ### CONSTRUCT:
 
+**1.** Set your X and y variables. X represents the features and y represents the outcome (target) variable.
+
+**2.** Dummy encode categorical variables
+
+**3.** Create training and testing sets. The test set should contain 20% of the total samples. Set `random_state=0`.
+
+**4.** Use `StandardScaler()`, `fit()`, and `transform()` to standardize the `X_train` variables. Assign the results to a variable called `X_train_scaled`.
+
+**5.** Instantiate your model and fit it to the training data.
+
+**6. Evaluate Model**
+
+**a) Train Data**
+
+Evaluate the model performance by calculating the residual sum of squares and the explained variance score (R^2). Calculate the Mean Absolute Error, Mean Squared Error, and the Root Mean Squared Error.
+
+<img width="417" alt="Screenshot 2024-03-03 at 1 51 50 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/f9f70d7e-3611-4fd7-b82f-bb661ec65b51">
+
+**b) Test Data**
+
+Calculate the same metrics on the test data. Scale the `X_test` data using the scaler that was fit to the training data. Do not refit the scaler to the testing data, just transform it. Call the results `X_test_scaled`.
+
+<img width="423" alt="Screenshot 2024-03-03 at 1 52 54 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/687e79ba-0014-41ec-8367-0e071f414398">
+
+The model performance is high on both training and test sets, suggesting that there is little bias in the model and that the model is not overfit. In fact, the test scores were even better than the training scores.
+
+For the test data, an R<sup>2</sup> of 0.868 means that 86.8% of the variance in the `fare_amount` variable is described by the model.
+
+The mean absolute error is informative here because, for the purposes of the model, an error of two is not more than twice as bad as an error of one.
+
+### EXECUTE:
+
+**1.** obtain `actual`,`predicted`, and `residual` for the testing set, and store them as columns in a `results` dataframe.
+
+<img width="242" alt="Screenshot 2024-03-03 at 1 55 39 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/8609e2af-aaa3-4fc8-8f01-1a4b697a61b7">
+
+**2.** Create a scatterplot to visualize `actual` vs. `predicted`.
+
+<img width="413" alt="Screenshot 2024-03-03 at 1 56 11 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1ea681d8-d457-413e-b5f9-5fcf8abba848">
+
+**3.** Visualize the distribution of the `residuals` using a histogram
+
+<img width="413" alt="Screenshot 2024-03-03 at 1 57 04 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/25ddf149-a88b-4174-a560-43e6862a6394">
+
+**4.** results['residual'].mean()
+
+<img width="178" alt="Screenshot 2024-03-03 at 1 57 37 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/270928b0-5b02-4468-b45e-21978648f008">
+
+**The distribution of the residuals is approximately normal and has a mean of -0.015. The residuals represent the variance in the outcome variable that is not explained by the model. A normal distribution around zero is good, as it demonstrates that the model's errors are evenly distributed and unbiased.**
+
+**5.** Create a scatterplot of `residuals` over `predicted`.
+
+<img width="416" alt="Screenshot 2024-03-03 at 1 59 07 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/b7e7a383-e332-4686-8559-491a9e551416">
+
+The model's residuals are evenly distributed above and below zero, with the exception of the sloping lines from the upper-left corner to the lower-right corner, which you know are the imputed maximum of \\$62.50 and the flat rate of \\$52 for JFK airport trips.
+
+**6** Use the `coef_` attribute to get the model's coefficients. The coefficients are output in the order of the features that were used to train the model.
+
+<img width="484" alt="Screenshot 2024-03-03 at 1 59 58 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1a64fa04-788b-461c-ae20-873c7ea1a40d">
+
+The coefficients reveal that `mean_distance` was the feature with the greatest weight in the model's final prediction. A common misinterpretation is that for every mile traveled, the fare amount increases by a mean of \\$7.13. This is incorrect. The data used to train the model was standardized with `StandardScaler()`. As such, the units are no longer miles. In other words, we cannot say "for every mile traveled...", as stated above. The correct interpretation of this coefficient is: controlling for other variables, *for every +1 change in standard deviation*, the fare amount increases by a mean of \\$7.13. 
+
+Note also that because some highly correlated features were not removed, the confidence interval of this assessment is wider.
+
+So let us translate this back to miles instead of standard deviation
+
+**a)** Calculate the standard deviation of `mean_distance` in the `X_train` data.
+
+**b)** Divide the coefficient (7.133867) by the result to yield a more intuitive interpretation.
+
+<img width="171" alt="Screenshot 2024-03-03 at 2 04 32 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/645ebd5e-6f31-4e47-802b-2a8444e9a109">
+
+Now we can make a more intuitive interpretation: for every 3.57 miles traveled, the fare increased by a mean of \\$7.13. Or, reduced: for every 1 mile traveled, the fare increased by a mean of \\$2.00.
+
+**7. Conclusion**
+
+* Multiple linear regression is a powerful tool to estimate a dependent continous variable from several independent variables.
+* Exploratory data analysis is useful for selecting both numeric and categorical features for multiple linear regression.
+* Fitting multiple linear regression models may require trial and error to select variables that fit an accurate model while maintaining model assumptions (or not, depending on our use case).
+
+
+## PACE 4
+
+### PLAN:
+
+
+
+
+
+
+
+
 
 
 
