@@ -984,14 +984,65 @@ Notice that the scores went down from the training scores across all metrics, bu
 
 Just like with the random forest model, the XGBoost model's validation scores were lower, but only very slightly. It is still the clear champion.
 
+### EXECUTE:
 
+**1. Use champion model to predict on test data**
 
+Now, let us use the champion model to predict on the test dataset. This is to give a final indication of how we should expect the model to perform on new future data, should we decide to use the model.
 
+<img width="348" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/0db96645-8320-4040-b7f1-6967d3a06b6a">
 
+The recall was exactly the same as it was on the validation data, but the precision declined notably, which caused all of the other scores to drop slightly. Nonetheless, this is stil within the acceptable range for performance discrepancy between validation and test scores.
 
+**2. Confusion Matrix**
 
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/a26e8c1c-10fd-4be9-a325-6c36b396aa09">
 
+The model predicted three times as many false negatives than it did false positives, and it correctly identified only 16.6% of the users who actually churned.
 
+**3. Feature Importance**
 
+Use the `plot_importance` function to inspect the most important features of your final model.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/44e7c3b2-1f8c-4360-99ca-f0aa6c36c2e0">
+
+The XGBoost model made more use of many of the features than did the logistic regression model from the previous course, which weighted a single feature (`activity_days`) very heavily in its final prediction.
+
+**4. Identify an optimal decision threshold**
+
+The default decision threshold for most implementations of classification algorithms&mdash;including scikit-learn's&mdash;is 0.5. This means that, in the case of the Waze models, if they predicted that a given user had a 50% probability or greater of churning, then that user was assigned a predicted value of `1`&mdash;the user was predicted to churn.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1423ab9c-0542-4e8a-b132-02c6e1f8c0cb">
+
+As recall increases, precision decreases. But what if we determined that false positives aren't much of a problem? For example, in the case of this Waze project, a false positive could just mean that a user who will not actually churn gets an email and a banner notification on their phone. It's very low risk.
+
+Instead of using the default 0.5 decision threshold of the model, let us use a lower threshold 0.4:
+
+<img width="414" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/0876f46e-b399-4b75-9c08-8a36904df104">
+
+The `predict_proba()` method returns a 2-D array of probabilities where each row represents a user. The first number in the row is the probability of belonging to the negative class, the second number in the row is the probability of belonging to the positive class. 
+
+We can generate new predictions based on this array of probabilities by changing the decision threshold for what is considered a positive response. For example, the we can use a different code to convert the predicted probabilities to {0, 1} predictions with a threshold of 0.4. In other words, any users who have a value ≥ 0.4 in the second column will get assigned a prediction of `1`, indicating that they churned.
+
+<img width="416" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/4dfcb77a-f888-42b4-88fe-86465663d327">
+
+Let us compare this with the results from earlier 
+
+<img width="345" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/7e96b51d-f690-4eb0-adf3-59a8be3bd2fc">
+
+Recall and F1 score increased significantly, while precision and accuracy decreased marginally.
+
+So, using the precision-recall curve as a guide, suppose you knew that you'd be satisfied if the model had a recall score of 0.5 and you were willing to accept the \~30% precision score that comes with it. In other words, We will be happy if the model successfully identified half of the people who will actually churn, even if it means that when the model says someone will churn, it's only correct about 30% of the time.
+
+**5. Conclusion**
+
+**a)** Splitting the data three ways means that there is less data available to train the model than splitting just two ways. However, performing model selection on a separate validation set enables testing of the champion model by itself on the test set, which gives a better estimate of future performance than splitting the data two ways and selecting a champion model by performance on the test data.
+
+**b)** Logistic regression models are easier to interpret. Because they assign coefficients to predictor variables, they reveal not only which features factored most heavily into their final predictions, but also the directionality of the weight. In other words, they tell you if each feature is positively or negatively correlated with the target in the model's final prediction.
+
+**c)** Tree-based model ensembles are often better predictors. If the most important thing is the predictive power of the model, then tree-based modeling will usually win out against logistic regression. They also require much less data cleaning and require fewer assumptions about the underlying distributions of their predictor variables, so they're easier to work with.
+
+**d)** New features could be engineered to try to generate better predictive signal, as they often do if you have domain knowledge. In the case of this model, the engineered features made up over half of the top 10 most-predictive features used by the model. It could also be helpful to reconstruct the model with different combinations of predictor variables to reduce noise from unpredictive features.
 
 [View Python Code](https://github.com/Anish935/Project_Portfolio/blob/main/waze%20code.py)
+
