@@ -348,6 +348,98 @@ The `sessions` variable is a right-skewed distribution with half of the observat
 
 The `drives` information follows a distribution similar to the `sessions` variable. It is right-skewed, approximately log-normal, with a median of 48. However, some drivers had over 400 drives in the last month.
 
+**3. total sessions: A model estimate of the total number of sessions since a user has onboarded**
+
+<img width="427" alt="Screenshot 2024-02-29 at 1 32 59 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/cfe2544d-87fb-4b2a-aeb0-69183d81665e">
+
+<img width="496" alt="Screenshot 2024-02-29 at 1 33 23 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/940fface-944d-400e-83b1-b8bc8822ebd8">
+
+The `total_sessions` is a right-skewed distribution. The median total number of sessions is 159.6. This is interesting information because, if the median number of sessions in the last month was 56 and the median total sessions was ~160, then it seems that a large proportion of a user's (estimated) total drives might have taken place in the last month. This is something that can be examined more closely later.
+
+**4. n_days_after_onboarding: The number of days since a user signed up for the app**
+
+<img width="425" alt="Screenshot 2024-02-29 at 1 43 00 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/aebe5dbc-7cde-4a70-a4fb-1280fb882fa6">
+
+<img width="475" alt="Screenshot 2024-02-29 at 1 45 17 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/f12b6bda-c5c3-4f40-a0d3-f5505339ef68">
+
+The total user tenure (i.e., number of days since onboarding) is a uniform distribution with values ranging from near-zero to \~3,500 (\~9.5 years).
+
+**5. driven_km_drives: Total kilometers driven during the month**
+
+<img width="426" alt="Screenshot 2024-02-29 at 1 47 51 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/90639538-9c7d-4630-86a5-88cf125447f2">
+
+<img width="486" alt="Screenshot 2024-02-29 at 1 48 15 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/48721330-5aae-4648-82ee-779af12a17da">
+
+The number of drives driven in the last month per user is a right-skewed distribution with half the users driving under 3,495 kilometers. The users in this dataset drive _a lot_. The longest distance driven in the month was over half the circumferene of the earth.
+
+**6. duration_minutes_drives: Total duration driven in minutes during the month**
+
+<img width="421" alt="Screenshot 2024-02-29 at 1 53 46 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/ba2282f6-1e36-44ee-90bd-2993ed614182">
+
+<img width="493" alt="Screenshot 2024-02-29 at 1 54 19 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/927bd3b9-4b62-4049-9dee-0c359a56739d">
+
+The `duration_minutes_drives` variable has a heavily skewed right tail. Half of the users drove less than \~1,478 minutes (\~25 hours), but some users clocked over 250 hours over the month.
+
+**7. activity_days: Number of days the users opens the app during the month**
+
+<img width="431" alt="Screenshot 2024-02-29 at 1 56 57 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/defd299d-0265-4328-8b0e-8e7ffbea6394">
+
+<img width="478" alt="Screenshot 2024-02-29 at 1 57 18 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/582f4db0-58f1-40bf-9d07-946943b47170">
+
+Within the last month, users opened the app a median of 16 times. The box plot reveals a centered distribution. The histogram shows a nearly uniform distribution of ~500 people opening the app on each count of days. However, there are ~250 people who didn't open the app at all and ~250 people who opened the app every day of the month. This distribution is noteworthy because it does not mirror the `sessions` distribution, which we might think would be closely correlated with `activity_days`.
+
+**8. driving_days: Number of days the user drives (at least 1 km) during the month**
+
+<img width="419" alt="Screenshot 2024-02-29 at 1 59 59 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/14041583-eb3a-41f7-a199-c4a33f44f667">
+
+<img width="485" alt="Screenshot 2024-02-29 at 2 00 21 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/ff2afb61-5c4d-4a9b-bb55-04572f75d27b">
+
+The number of days users drove each month is almost uniform, and it largely correlates with the number of days they opened the app that month, except the `driving_days` distribution tails off on the right.
+However, there were almost twice as many users (\~1,000 vs. \~550) who did not drive at all during the month. This might seem counterintuitive when considered together with the information from `activity_days`. That variable had \~500 users opening the app on each of most of the day counts, but there were only \~250 users who did not open the app at all during the month and ~250 users who opened the app every day. Let us flag this for further investigation later.
+
+**9. device: The type of device a user starts a session with**
+
+<img width="321" alt="Screenshot 2024-02-29 at 2 03 47 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/73e41309-5037-4d13-9a85-9b571aaf921d">
+
+There are nearly twice as many iPhone users as Android users represented in this data.
+
+**10. label: Binary target variable (“retained” vs “churned”) for if a user has churned anytime during the course of the month**
+
+<img width="420" alt="Screenshot 2024-02-29 at 2 05 01 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/af83b08d-33af-4559-a3ea-e6ab8ea4c816">
+
+Less than 18% of the users churned.
+
+**11. driving_days vs activity_days:**
+
+Because both `driving_days` and `activity_days` represent counts of days over a month and they're also closely related, we can plot them together on a single histogram. This will help to better understand how they relate to each other without having to scroll back and forth comparing histograms in two different places
+
+<img width="1057" alt="Screenshot 2024-02-29 at 2 09 15 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/91bd793c-d7f5-4eb2-96ad-0cb83ec2196c">
+
+As observed previously, this might seem counterintuitive. After all, why are there _fewer_ people who didn't use the app at all during the month and _more_ people who didn't drive at all during the month?
+
+On the other hand, it could just be illustrative of the fact that, while these variables are related to each other, they're not the same. People probably just open the app more than they use the app to drive&mdash;perhaps to check drive times or route information, to update settings, or even just by mistake.
+
+Confirm the maximum number of days for each variable&mdash;`driving_days` and `activity_days` to obtain 30 & 31 respectively. It's true. Although it's possible that not a single user drove all 31 days of the month, it's highly unlikely, considering there are 15,000 people represented in the dataset.
+One other way to check the validity of these variables is to plot a simple scatter plot with the x-axis representing one variable and the y-axis representing the other.
+
+<img width="590" alt="Screenshot 2024-02-29 at 2 12 15 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/285a9d6c-ade0-4baf-ae32-0e3a77756129">
+
+Notice that there is a theoretical limit. If you use the app to drive, then by definition it must count as a day-use as well. In other words, you cannot have more drive-days than activity-days. None of the samples in this data violate this rule, which is good.
+
+**12. Retention by Device:**
+
+Plot a histogram that has four bars&mdash;one for each device-label combination&mdash;to show how many iPhone users were retained/churned and how many Android users were retained/churned.
+
+<img width="482" alt="Screenshot 2024-02-29 at 2 14 10 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/593e6dda-05a9-4772-95a3-3b196fdf4219">
+
+The proportion of churned users to retained users is consistent between device types.
+
+**13. Churn rate per number of driving days:**
+
+<img width="1020" alt="Screenshot 2024-02-29 at 2 18 26 PM" src="https://github.com/Anish935/Waze-Project/assets/156449940/4c8cd4bc-0658-451b-8c5f-d6b99eb1cf7c">
+
+The churn rate is highest for people who didn't use Waze much during the last month. The more times they used the app, the less likely they were to churn. While 40% of the users who didn't use the app at all last month churned, nobody who used the app 30 days churned.
+This isn't surprising. If people who used the app a lot churned, it would likely indicate dissatisfaction. When people who don't use the app churn, it might be the result of dissatisfaction in the past, or it might be indicative of a lesser need for a navigational app. Maybe they moved to a city with good public transportation and don't need to drive anymore.
 
 
 
