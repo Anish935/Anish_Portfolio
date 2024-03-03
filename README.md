@@ -525,6 +525,7 @@ We can use the `stats.ttest_ind()` function to perform the test.
 **Result:** Since the p-value is larger than the chosen significance level (5%), we fail to reject the null hypothesis. We can conclude that there is **not** a statistically significant difference in the average number of drives between drivers who use iPhones and drivers who use Androids.
 
 ### EXECUTE: 
+
 One potential next step is to explore what other factors influence the variation in the number of drives, and run additonal hypothesis tests to learn more about user behavior. Further, temporary changes in marketing or user interface for the Waze app may provide more data to investigate churn.
 
 ## PACE 3
@@ -536,18 +537,27 @@ We will create a binomial logistic regression model for the churn project. We'll
 **Import the following packages to build a regression model:**
 
 *Packages for numerics + dataframes*
+
 import pandas as pd
+
 import numpy as np
 
 *Packages for visualization*
+
 import matplotlib.pyplot as plt
+
 import seaborn as sns
 
 *Packages for Logistic Regression & Confusion Matrix*
+
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score, precision_score, \
+
+from sklearn.metrics import classification_report, accuracy_score, precision_score,
+
 recall_score, f1_score, confusion_matrix, ConfusionMatrixDisplay
+
 from sklearn.linear_model import LogisticRegression
 
 ### ANALYZE:
@@ -613,7 +623,7 @@ The last assumptions will be verified after modeling.
 
 **3. Collinearity:**
 
-![heatmap](https://github.com/Anish935/Waze-Project/assets/156449940/ddab355f-db4e-4967-a1ab-00330e0fad94)
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d41178f3-6fd6-4bcc-8731-21eb05b02d83">
 
 If there are predictor variables that have a Pearson correlation coefficient value greater than the **absolute value of 0.7**, these variables are strongly multicollinear. Therefore, only one of these variables should be used in our model.
 
@@ -724,6 +734,259 @@ The model has mediocre precision and very low recall, which means that it makes 
 **c)** New features could be engineered to try to generate better predictive signal, as they often do if we have domain knowledge. In the case of this model, one of the engineered features (`professional_driver`) was the third-most-predictive predictor. It could also be helpful to scale the predictor variables, and/or to reconstruct the model with different combinations of predictor variables to reduce noise from unpredictive features.
 
 **d)** It would be helpful to have drive-level information for each user (such as drive times, geographic locations, etc.). It would probably also be helpful to have more granular data to know how users interact with the app. For example, how often do they report or confirm road hazard alerts? Finally, it could be helpful to know the monthly count of unique starting and ending locations each driver inputs.
+
+## PACE 4
+
+We will create the final machine learning model for the churn project using feature engineering, two tree-based models: random forest, and XGBoost. The project will be completed through model development and evaluation 
+
+### PLAN: 
+
+**1. Ethical Considerations**
+
+**a)**   What are you being asked to do?
+> _Predict if a customer will churn or be retained._
+
+**b)**   What are the ethical implications of the model? What are the consequences of your model making errors? i.e What is the likely effect of the model when it predicts a false negative (i.e., when the model says a Waze user won't churn, but they actually will)?
+
+> _Waze will fail to take proactive measures to retain users who are likely to stop using the app. For example, Waze might proactively push an app notification to users, or send a survey to better understand user dissatisfaction._
+
+**c)** What is the likely effect of the model when it predicts a false positive (i.e., when the model says a Waze user will churn, but they actually won't)?
+> _Waze may take proactive measures to retain users who are NOT likely to churn. This may lead to an annoying or negative experience for loyal users of the app._
+
+**d)**   Do the benefits of such a model outweigh the potential problems?
+> _The proactive measueres taken by Waze might have unintended effects on users, and these effects might encourage user churn. Follow-up analysis on the effectiveness of the measures is recommended. If the measures are reasonable and effective, then the benefits will most likely outweigh the problems._
+
+
+**2. Import packages and libraries needed to build and evaluate random forest and XGBoost classification models**
+
+**3. Now read in the dataset as `df0` and inspect the first five rows**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/dc6079af-976e-42e2-acc8-9556a17562f3">
+
+### ANALYZE: 
+
+**1. Feature Engineering**
+
+To begin, create a copy of `df0` to preserve the original dataframe. Call the copy `df`.
+
+**a)** **`km_per_driving_day`**
+
+(i) Create a feature representing the mean number of kilometers driven on each driving day in the last month for each user. Add this feature as a column to `df`.
+
+(ii) Get descriptive statistics for this new feature
+
+(iii) Convert these values from infinity to zero. You can use `np.inf` to refer to a value of infinity.
+
+(iv) Call `describe()` on the `km_per_driving_day` column to verify that it worked.
+
+<img width="336" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/7eb78fdd-0086-4130-ab90-d87ebd8163f4">
+
+**b)** **`percent_sessions_in_last_month`**
+
+Create a new column `percent_sessions_in_last_month` that represents the percentage of each user's total sessions that were logged in their last month of use.
+
+**c)** **`professional_driver`**
+
+Create a new, binary feature called `professional_driver` that is a 1 for users who had 60 or more drives <u>**and**</u> drove on 15+ days in the last month.
+
+**Note:** The objective is to create a new feature that separates professional drivers from other drivers. In this scenario, domain knowledge and intuition are used to determine these deciding thresholds, but ultimately they are arbitrary.
+
+**d)** **`total_sessions_per_day`**
+
+Now, create a new column that represents the mean number of sessions per day _since onboarding_.
+
+**e)** **`km_per_hour`**
+
+Create a column representing the mean kilometers per hour driven in the last month.
+
+**f)** **`km_per_drive`**
+
+Create a column representing the mean number of kilometers per drive made in the last month for each user. 
+
+**g)** **`percent_of_sessions_to_favorite`**
+
+Finally, create a new column that represents the percentage of total sessions that were used to navigate to one of the users' favorite places. 
+
+This is a proxy representation for the percent of overall drives that are to a favorite place. Since total drives since onboarding are not contained in this dataset, total sessions must serve as a reasonable approximation.
+
+People whose drives to non-favorite places make up a higher percentage of their total drives might be less likely to churn, since they're making more drives to less familiar places.
+
+**2. Drop missing values**
+
+Because we know from previous EDA that there is no evidence of a non-random cause of the 700 missing values in the `label` column, and because these observations comprise less than 5% of the data, use the `dropna()` method to drop the rows that are missing this data.
+
+**3. Outliers**
+
+We know from previous EDA that many of these columns have outliers. However, tree-based models are resilient to outliers, so there is no need to make any imputations.
+
+**4. Variable Encoding**
+
+**a) Dummying features** 
+
+Because this dataset only has one remaining categorical feature (`device`), it's not necessary to use one of these special functions. we can just implement the transformation directly.
+
+Create a new, binary column called `device2` that encodes user devices as follows:
+
+* `Android` -> `0`
+* `iPhone` -> `1`
+
+**b) Target Encoding**
+
+The target variable is also categorical, since a user is labeled as either "churned" or "retained." Change the data type of the `label` column to be binary. This change is needed to train the models.
+
+Assign a `0` for all `retained` users.
+
+Assign a `1` for all `churned` users.
+
+Save this variable as `label2` so as not to overwrite the original `label` variable.
+
+**5. Feature Selection**
+
+Tree-based models can handle multicollinearity, so the only feature that can be cut is `ID`, since it doesn't contain any information relevant to churn.
+
+Note, however, that `device` won't be used simply because it's a copy of `device2`.
+
+Drop `ID` from the `df` dataframe.
+
+**6. Evaluation Metric**
+
+Before modeling, we must decide on an evaluation metric. This will depend on the class balance of the target variable and the use case of the model.
+
+First, examine the class balance of the target variable.
+
+<img width="298" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/ee412c18-f60c-438d-a9d2-3df9e32a57bc">
+
+Approximately 18% of the users in this dataset churned. This is an unbalanced dataset, but not extremely so. It can be modeled without any class rebalancing.
+
+Now, consider which evaluation metric is best. Remember, accuracy might not be the best gauge of performance because a model can have high accuracy on an imbalanced dataset and still fail to predict the minority class.
+
+It was already determined that the risks involved in making a false positive prediction are minimal. No one stands to get hurt, lose money, or suffer any other significant consequence if they are predicted to churn. Therefore, let us select the model based on the recall score.
+
+### CONSTRUCT:
+
+**1. Modeling workflow and model selection process**
+
+The final modeling dataset contains 14,299 samples. This is towards the lower end of what might be considered sufficient to conduct a robust model selection process, but still doable.
+
+**a)** Split the data into train/validation/test sets (60/20/20)
+
+Note that, when deciding the split ratio and whether or not to use a validation set to select a champion model, consider both how many samples will be in each data partition, and how many examples of the minority class each would therefore contain. In this case, a 60/20/20 split would result in \~2,860 samples in the validation set and the same number in the test set, of which \~18%&mdash;or 515 samples&mdash;would represent users who churn.
+
+**b)** Fit models and tune hyperparameters on the training set
+
+**c)** Perform final model selection on the validation set
+
+**d)** Assess the champion model's performance on the test set
+
+![](https://raw.githubusercontent.com/adacert/tiktok/main/optimal_model_flow_numbered.svg)
+
+**2. Split the data**
+
+Now you're ready to model. The only remaining step is to split the data into features/target variable and training/validation/test sets.
+
+**a)** Define a variable `X` that isolates the features. Remember not to use `device`.
+
+**b)** Define a variable `y` that isolates the target variable (`label2`).
+
+**c)** Split the data 80/20 into an interim training set and a test set. Don't forget to stratify the splits, and set the random state to 42.
+
+**d)** Split the interim training set 75/25 into a training set and a validation set, yielding a final ratio of 60/20/20 for training/validation/test sets. Again, don't forget to stratify the splits and set the random state.
+
+**3. Modelling**
+
+**a) Random Forest**
+
+Begin with using `GridSearchCV` to tune a random forest model.
+
+**(i)** Instantiate the random forest classifier `rf` and set the random state.
+
+**(ii)** Create a dictionary `cv_params` of any of the following hyperparameters and their corresponding values to tune. The more you tune, the better your model will fit the data, but the longer it will take.
+ - `max_depth`
+ - `max_features`
+ - `max_samples`
+ - `min_samples_leaf`
+ - `min_samples_split`
+ - `n_estimators`
+
+**(iii)** Define a set `scoring` of scoring metrics for GridSearch to capture (precision, recall, F1 score, and accuracy).
+
+**(iv)** Instantiate the `GridSearchCV` object `rf_cv`. Pass to it as arguments:
+ - estimator=`rf`
+ - param_grid=`cv_params`
+ - scoring=`scoring`
+ - cv: define the number of cross-validation folds you want (`cv=_`)
+ - refit: indicate which evaluation metric you want to use to select the model (`refit=_`)
+
+`refit` should be set to `'recall'`.<font/>
+
+**(v)** Now let us fit the model to the training data
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1db8845d-a16d-4abb-845a-a1e6c39bbebc">
+
+**(vi)** Examine the best average score across all the validation folds 
+
+<img width="183" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/ae750aff-3161-4792-8923-83d6781a6a53">
+
+**(vii)** Examine the best combination of hyperparameters 
+
+<img width="209" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/a5f5bba2-b420-4289-988c-d19006c776c3">
+
+**(viii)** Pass the `GridSearch` object to the `make_results()` function.
+
+<img width="337" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/4a459b5d-7a47-495a-9bf2-d318c09f3879">
+
+Aside from the accuracy, the scores aren't that good. However, recall that when we built the logistic regression model in the last PACE the recall was \~0.09, which means that this model has 33% better recall and about the same accuracy, and it was trained on less data.
+
+**b) XGBoost**
+
+Let us try to improve your scores using an XGBoost model.
+
+**(i)** Instantiate the XGBoost classifier `xgb` and set `objective='binary:logistic'`. Also set the random state.
+
+**(ii)** Create a dictionary `cv_params` of the following hyperparameters and their corresponding values to tune:
+ - `max_depth`
+ - `min_child_weight`
+ - `learning_rate`
+ - `n_estimators`
+
+**(iii)** Define a set `scoring` of scoring metrics for grid search to capture (precision, recall, F1 score, and accuracy).
+
+**(iv)** Instantiate the `GridSearchCV` object `xgb_cv`. Pass to it as arguments:
+ - estimator=`xgb`
+ - param_grid=`cv_params`
+ - scoring=`scoring`
+ - cv: define the number of cross-validation folds you want (`cv=_`)
+ - refit: indicate which evaluation metric you want to use to select the model (`refit='recall'`)
+
+**(v)** Now fit the model to the `X_train` and `y_train` data.
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d99aa6c5-e515-45c2-a514-479e063caf7a">
+
+**(vi)** Get the best score from the model, the best parameters, and use the `make_results()` function to output all of the scores of the model. 
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/fc87327e-1396-47a3-9349-007a4c396c1f">
+
+**This model fit the data even better than the random forest model. The recall score is nearly double the recall score from the logistic regression model from the previous PACE, and it's almost 50% better than the random forest model's recall score, while maintaining a similar accuracy and precision score**
+
+**4. Model selection**
+
+Now, let us use the best random forest model and the best XGBoost model to predict on the validation data. Whichever performs better will be selected as the champion model.
+
+**a) Random Forest**
+
+<img width="353" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/c5eb543d-0231-49dc-8537-0492ccd855e4">
+
+Notice that the scores went down from the training scores across all metrics, but only by very little. This means that the model did not overfit the training data.
+
+**b) XGBoost**
+
+<img width="357" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/f7bea7d0-5ad8-4494-b758-33106c51e792">
+
+Just like with the random forest model, the XGBoost model's validation scores were lower, but only very slightly. It is still the clear champion.
+
+
+
+
 
 
 
