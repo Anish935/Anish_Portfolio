@@ -1259,6 +1259,166 @@ We can conclude that there is a statistically significant difference in the aver
 
 ### PLAN:
 
+**1.** Import the packages that are needed for building linear regression models.
+
+### ANALYZE:
+
+**1.** Convert pickup & dropoff columns to datetime
+
+**2.** Create a new column called `duration` that represents the total number of minutes that each taxi ride took.
+
+**3.** Call `df.info()` to inspect the columns and decide which ones to check for outliers.
+
+**4.** Plot a box plot for each feature: `trip_distance`, `fare_amount`, `duration`.
+
+<img width="887" alt="Screenshot 2024-03-03 at 1 05 34 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/c4aea4e5-5ef1-4652-8d58-98703ced6729">
+
+**a)** All three variables contain outliers. Some are extreme, but others not so much.
+
+**b)** It's 30 miles from the southern tip of Staten Island to the northern end of Manhattan and that's in a straight line. With this knowledge and the distribution of the values in this column, it's reasonable to leave these values alone and not alter them. However, the values for `fare_amount` and `duration` definitely seem to have problematic outliers on the higher end.
+
+**Imputations**
+
+**1.** `trip_distance` outliers
+
+**a)** To check, we need to sort the column values, eliminate duplicates, and inspect the least 10 values. 
+
+**b)** Calculate the count of rides where the `trip_distance` is zero.
+
+<img width="33" alt="Screenshot 2024-03-03 at 1 10 02 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/45b59a34-9213-4e46-a478-498031c05eeb">
+
+148 out of ~23,000 rides is relatively insignificant. We could impute it with a value of 0.01, but it's unlikely to have much of an effect on the model. Therefore, the `trip_distance` column will remain untouched with regard to outliers.
+
+**2.** `fare_amount` outliers
+
+The range of values in the `fare_amount` column is large and the extremes don't make much sense.
+
+**Low values:** Negative values are problematic. Values of zero could be legitimate if the taxi logged a trip that was immediately canceled.
+
+**High values:** The maximum fare amount in this dataset is nearly \\$1,000, which seems very unlikely. High values for this feature can be capped based on intuition and statistics. The interquartile range (IQR) is \\$8. The standard formula of `Q3 + (1.5 * IQR)` yields \$26.50. That doesn't seem appropriate for the maximum fare cap. In this case, we'll use a factor of `6`, which results in a cap of $62.50.
+
+**a)** Impute values less than $0 with `0`.
+
+**b)** Now impute the maximum value as `Q3 + (6 * IQR)`.
+
+<img width="289" alt="Screenshot 2024-03-03 at 1 14 31 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/40615d3e-a6e1-40bb-8dbc-e329e685ab7b">
+
+**3.**  `duration` outliers
+
+<img width="264" alt="Screenshot 2024-03-03 at 1 15 33 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/a5393188-8969-4b48-8580-ad0b281b7248">
+
+The `duration` column has problematic values at both the lower and upper extremities.
+
+**Low values:** There should be no values that represent negative time. Impute all negative durations with `0`.
+
+**High values:** Impute high values the same way you imputed the high-end outliers for fares: `Q3 + (6 * IQR)`.
+
+<img width="312" alt="Screenshot 2024-03-03 at 1 16 43 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/3ceca35c-b40b-4717-a77e-826941a642e0">
+
+**Feature Engineering**
+
+**1.** Create `mean_distance` column
+
+For example, if our data were:
+
+|Trip|Start|End|Distance|
+|--: |:---:|:-:|    |
+| 1  | A   | B | 1  |
+| 2  | C   | D | 2  |
+| 3  | A   | B |1.5 |
+| 4  | D   | C | 3  |
+
+The results should be:
+```
+A -> B: 1.25 miles
+C -> D: 2 miles
+D -> C: 3 miles
+```
+
+Notice that C -> D is not the same as D -> C. All trips that share a unique pair of start and end points get grouped and averaged.
+
+Then, a new column `mean_distance` will be added where the value at each row is the average for all trips with those pickup and dropoff locations:
+
+|Trip|Start|End|Distance|mean_distance|
+|--: |:---:|:-:|  :--   |:--   |
+| 1  | A   | B | 1      | 1.25 |
+| 2  | C   | D | 2      | 2    |
+| 3  | A   | B |1.5     | 1.25 |
+| 4  | D   | C | 3      | 3    |
+
+
+Let us begin by creating a helper column called `pickup_dropoff`, which contains the unique combination of pickup and dropoff location IDs for each row.
+
+One way to do this is to convert the pickup and dropoff location IDs to strings and join them, separated by a space. The space is to ensure that, for example, a trip with pickup/dropoff points of 12 & 151 gets encoded differently than a trip with points 121 & 51.
+
+So, the new column would look like this:
+
+|Trip|Start|End|pickup_dropoff|
+|--: |:---:|:-:|  :--         |
+| 1  | A   | B | 'A B'        |
+| 2  | C   | D | 'C D'        |
+| 3  | A   | B | 'A B'        |
+| 4  | D   | C | 'D C'        |
+
+<img width="310" alt="Screenshot 2024-03-03 at 1 21 27 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/72ea3bfd-f1ca-4661-bcf5-7b03ad720d4d">
+
+Now, let us use a `groupby()` statement to group each row by the new `pickup_dropoff` column, compute the mean, and capture the values only in the `trip_distance` column. Assign the results to a variable named `grouped`.
+
+**2.** Create a `mean_distance` column that is a copy of the `pickup_dropoff` helper column.
+
+**3.** Use the [`map()`](https://pandas.pydata.org/docs/reference/api/pandas.Series.map.html#pandas-series-map) method on the `mean_distance` series. Pass `grouped_dict` as its argument. Reassign the result back to the `mean_distance` series.
+</br></br>
+When we pass a dictionary to the `Series.map()` method, it will replace the data in the series where that data matches the dictionary's keys. The values that get imputed are the values of the dictionary.
+
+**4** Repeat the process used to create the `mean_distance` column to create a `mean_duration` column.
+
+**5.** Create two new columns, `day` (name of day) and `month` (name of month) by extracting the relevant information from the `tpep_pickup_datetime` column.
+
+**6.** Create `rush_hour` column
+
+Define rush hour as:
+* Any weekday (not Saturday or Sunday) AND
+* Either from 06:00&ndash;10:00 or from 16:00&ndash;20:00
+
+Create a binary `rush_hour` column that contains a 1 if the ride was during rush hour and a 0 if it was not.
+
+**7.** Create a scatterplot to visualize the relationship between `mean_duration` and `fare_amount`.
+
+<img width="383" alt="Screenshot 2024-03-03 at 1 28 01 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/2e2c9d68-3864-4b27-84b8-3f8cd4bffdc8">
+
+**8.** Drop features that are redundant, irrelevant, or that will not be available in a deployed environment.
+
+**9.** Create a pairplot to visualize pairwise relationships between `fare_amount`, `mean_duration`, and `mean_distance`.
+
+<img width="552" alt="Screenshot 2024-03-03 at 1 31 49 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/f2e42e75-1a49-4545-b878-627197c1a3e3">
+
+These variables all show linear correlation with each other.
+
+**10.** Next, code a correlation matrix to help determine most correlated variables.
+
+Visualize a correlation heatmap of the data.
+
+<img width="463" alt="Screenshot 2024-03-03 at 1 33 04 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/41b30f18-4124-45c6-92e5-d542fb036024">
+
+`mean_duration` and `mean_distance` are both highly correlated with the target variable of `fare_amount` They're also both correlated with each other, with a Pearson correlation of 0.87.
+
+This model will predict `fare_amount`, which will be used as a predictor variable in machine learning models. Therefore, let us try modeling with both variables even though they are correlated.
+
+### CONSTRUCT:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
