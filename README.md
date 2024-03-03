@@ -1491,6 +1491,202 @@ Now we can make a more intuitive interpretation: for every 3.57 miles traveled, 
 
 ### PLAN:
 
+Drivers who didn't receive tips will probably be upset that the app told them a customer would leave a tip. If it happened often, drivers might not trust the app.
+Drivers are unlikely to pick up people who are predicted to not leave tips. Customers will have difficulty finding a taxi that will pick them up, and might get angry at the taxi company. Even when the model is correct, people who can't afford to tip will find it more difficult to get taxis, which limits the accessibility of taxi service to those who pay extra.
+
+It's not good to disincentivize drivers from picking up customers. It could also cause a customer backlash. The problems seem to outweigh the benefits.
+
+Effectively limiting equal access to taxis is ethically problematic, and carries a lot of risk.
+
+We can build a model that predicts the most generous customers. This could accomplish the goal of helping taxi drivers increase their earnings from tips while preventing the wrongful exclusion of certain people from using taxis.
+
+This is a supervised learning, classification task. We could use accuracy, precision, recall, F-score, area under the ROC curve, or a number of other metrics. However, we don't have enough information at this time to know which are most appropriate. We need to know the class balance of the target variable.
+
+Import packages and libraries needed to build and evaluate random forest and XGBoost classification models.
+
+Begin by reading in the data. There are two dataframes: one containing the original data, the other containing the mean durations, mean distances, and predicted fares from the earlier called nyc_preds_means.csv.
+
+Join the two dataframes using any method.
+
+<img width="987" alt="Screenshot 2024-03-03 at 2 20 40 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/c9b81d80-e4d4-4e90-acfb-b08c1f93cad8">
+
+### ANALYZE:
+
+**Feature Engineering**
+
+Copy `df0` and assign the result to a variable called `df1`. Then, use a Boolean mask to filter `df1` so it contains only customers who paid with credit card.
+
+Notice that there isn't a column that indicates tip percent, which is what we need to create the target variable. we'll have to engineer it. 
+
+Add a `tip_percent` column to the dataframe by performing the following calculation:  
+<br/>  
+
+
+$$tip\ percent = \frac{tip\ amount}{total\ amount - tip\ amount}$$  
+
+Round the result to three places beyond the decimal. **This is an important step.** It affects how many customers are labeled as generous tippers. In fact, without performing this step, approximately 1,800 people who do tip ≥ 20% would be labeled as not generous.
+
+Now create another column called `generous`. This will be the target variable. The column should be a binary indicator of whether or not a customer tipped ≥ 20% (0=no, 1=yes).
+
+**1.** Begin by making the `generous` column a copy of the `tip_percent` column.
+
+**2.** Reassign the column by converting it to Boolean (True/False).
+
+**3.** Reassign the column by converting Boolean to binary (1/0).
+
+Next, engineer four new columns that represent time of day bins. Each column should contain binary values (0=no, 1=yes) that indicate whether a trip began (picked up) during the following times:
+
+`am_rush` = [06:00&ndash;10:00)  
+`daytime` = [10:00&ndash;16:00)  
+`pm_rush` = [16:00&ndash;20:00)  
+`nighttime` = [20:00&ndash;06:00)  
+
+Now, create a `month` column that contains only the abbreviated name of the month when each passenger was picked up, then convert the result to lowercase.
+
+Drop redundant and irrelevant columns as well as those that would not be available when the model is deployed. This includes information like payment type, trip distance, tip amount, tip percentage, total amount, toll amount, etc. The target variable (`generous`) must remain in the data because it will get isolated as the `y` data for modeling.
+
+**Variable Encoding**
+
+Many of the columns are categorical and will need to be dummied (converted to binary). Some of these columns are numeric, but they actually encode categorical information, such as `RatecodeID` and the pickup and dropoff locations. To make these columns recognizable to the `get_dummies()` function as categorical variables, you'll first need to convert them to `type(str)`. 
+
+**1.** Define a variable called `cols_to_str`, which is a list of the numeric columns that contain categorical information and must be converted to string: `RatecodeID`, `PULocationID`, `DOLocationID`.
+
+**2.** Write a for loop that converts each column in `cols_to_str` to string.
+
+**Evaluation Metric**
+
+Examine the class balance of the target variable
+
+<img width="278" alt="Screenshot 2024-03-03 at 2 33 22 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/da6cfe08-13f0-41bb-ad8f-b303fd2a5be7">
+
+A little over half of the customers in this dataset were "generous" (tipped ≥ 20%). The dataset is very nearly balanced.
+
+To determine a metric, consider the cost of both kinds of model error:
+
+* False positives (the model predicts a tip ≥ 20%, but the customer does not give one)
+
+* False negatives (the model predicts a tip < 20%, but the customer gives more)
+
+False positives are worse for cab drivers, because they would pick up a customer expecting a good tip and then not receive one, frustrating the driver.
+
+False negatives are worse for customers, because a cab driver would likely pick up a different customer who was predicted to tip more&mdash;even when the original customer would have tipped generously.
+
+F<sub>1</sub> score is the metric that places equal weight on true postives and false positives, and so therefore on precision and recall.
+
+### CONSTRUCT:
+
+**Modelling**
+
+**1. Split the Data**
+
+**a)** Define a variable `y` that isolates the target variable (`generous`).
+
+**b)** Define a variable `X` that isolates the features.
+
+**c)** Split the data into training and testing sets. Put 20% of the samples into the test set, stratify the data, and set the random state.
+
+**2. Random Forest**
+
+Begin with using `GridSearchCV` to tune a random forest model.
+
+**a)** Instantiate the random forest classifier `rf` and set the random state.
+
+**b)** Create a dictionary `cv_params` of any of the following hyperparameters and their corresponding values to tune. The more you tune, the better your model will fit the data, but the longer it will take. 
+ - `max_depth`  
+ - `max_features`  
+ - `max_samples` 
+ - `min_samples_leaf`  
+ - `min_samples_split`
+ - `n_estimators`  
+
+**c)** Define a set `scoring` of scoring metrics for GridSearch to capture (precision, recall, F1 score, and accuracy).
+
+**d)** Instantiate the `GridSearchCV` object `rf1`. Pass to it as arguments:
+ - estimator=`rf`
+ - param_grid=`cv_params`
+ - scoring=`scoring`
+ - cv: define the number of you cross-validation folds you want (`cv=_`)
+ - refit: indicate which evaluation metric you want to use to select the model (`refit=_`)
+
+**e)** Examine the best average score across all the validation folds, Examine the best combination of hyperparameters, and use the `make_results()` function to output all of the scores of your model.
+
+<img width="162" alt="Screenshot 2024-03-03 at 2 45 53 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/34dd37ed-bc4e-4a6a-9439-394909e58129">
+
+<img width="210" alt="Screenshot 2024-03-03 at 2 46 34 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/49ff6c76-61d5-4f8e-bfe7-ebff1601aedd">
+
+<img width="326" alt="Screenshot 2024-03-03 at 2 47 34 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/464a2df2-0b08-4004-8abc-de0adba96082">
+
+This is an acceptable model across the board. Typically scores of 0.65 or better are considered acceptable, but this is always dependent on the use case.
+
+**f)** Use your model to predict on the test data. Assign the results to a variable called `rf_preds`. Call `rf_test_scores` to output the results.
+
+<img width="333" alt="Screenshot 2024-03-03 at 2 50 15 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/c4917439-7262-4789-a7a6-8287098139b1">
+
+**All scores increased by at most ~0.02.**
+
+**3. XGBoost**
+
+Let us try to improve your scores using an XGBoost model.
+
+**a)** Instantiate the XGBoost classifier `xgb` and set `objective='binary:logistic'`. Also set the random state.
+
+**b)** Create a dictionary `cv_params` of the following hyperparameters and their corresponding values to tune:
+ - `max_depth`
+ - `min_child_weight`
+ - `learning_rate`
+ - `n_estimators`
+
+**c)** Define a set `scoring` of scoring metrics for grid search to capture (precision, recall, F1 score, and accuracy).
+
+**d)** Instantiate the `GridSearchCV` object `xgb1`. Pass to it as arguments:
+ - estimator=`xgb`
+ - param_grid=`cv_params`
+ - scoring=`scoring`
+ - cv: define the number of cross-validation folds you want (`cv=_`)
+ - refit: indicate which evaluation metric you want to use to select the model (`refit='f1'`)
+
+**e)** Now fit the model to the `X_train` and `y_train` data. 
+
+**f)** Get the best score from this model, the best parameters, and use the `make_results()` function to output all of the scores of your model.
+
+<img width="166" alt="Screenshot 2024-03-03 at 2 54 22 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/2b2aad25-fb59-4947-8f6c-861e7207ea45">
+
+<img width="204" alt="Screenshot 2024-03-03 at 2 54 32 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/9ded6e9b-8aaf-4815-903a-c0e4bb96974d">
+
+<img width="339" alt="Screenshot 2024-03-03 at 2 54 52 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1b27983f-2e06-4b9c-8d9a-e49289becba9">
+
+**g)** Use your model to predict on the test data. Assign the results to a variable called `xgb_preds`. Call `xgb_test_scores` to output the results.
+
+<img width="353" alt="Screenshot 2024-03-03 at 2 56 40 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d1add2e9-7477-4535-ad6f-671b4794414f">
+
+The F<sub>1</sub> score is ~0.01 lower than the random forest model. Both models are acceptable, but the random forest model is the champion.
+
+**4. Plot a confusion matrix of the champion model's predictions on the test data**
+
+<img width="335" alt="Screenshot 2024-03-03 at 2 57 47 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/e002aec9-16aa-4d64-a598-b740158a476f">
+
+The model is almost twice as likely to predict a false positive than it is to predict a false negative. Therefore, type I errors are more common. This is less desirable, because it's better for a driver to be pleasantly surprised by a generous tip when they weren't expecting one than to be disappointed by a low tip when they were expecting a generous one. However, the overall performance of this model is satisfactory. 
+
+**5. Feature Importance**
+
+<img width="626" alt="Screenshot 2024-03-03 at 2 58 49 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/8adb05ba-7486-4a52-a995-53bf1135dbcc">
+
+### EXECUTE:
+
+**1.** This model performs acceptably. Its F<sub>1</sub> score was 0.7235 and it had an overall accuracy of 0.6865. It correctly identified ~78% of the actual responders in the test set, which is 48% better than a random guess. It may be worthwhile to test the model with a select group of taxi drivers to get feedback.
+
+**2.** Unfortunately, random forest is not the most transparent machine learning algorithm. We know that `VendorID`, `predicted_fare`, `mean_duration`, and `mean_distance` are the most important features, but we don't know how they influence tipping. This would require further exploration. It is interesting that `VendorID` is the most predictive feature. This seems to indicate that one of the two vendors tends to attract more generous customers. It may be worth performing statistical tests on the different vendors to examine this further.  
+
+**3.** There are almost always additional features that can be engineered, but hopefully the most obvious ones were generated during the first round of modeling. In our case, we could try creating three new columns that indicate if the trip distance is short, medium, or far. We could also engineer a column that gives a ratio that represents (the amount of money from the fare amount to the nearest higher multiple of \$5) / fare amount. For example, if the fare were \$12, the value in this column would be 0.25, because \$12 to the nearest higher multiple of \$5 (\$15) is \$3, and \$3 divided by \$12 is 0.25. The intuition for this feature is that people might be likely to simply round up their tip, so journeys with fares with values just under a multiple of \$5 may have lower tip percentages than those with fare values just over a multiple of \$5. We could also do the same thing for fares to the nearest \$10.
+
+$$
+round5\_ratio = \frac{amount\ of\ money\ from\ the\ fare\ amount\ to\ the\ nearest\ higher\ multiple\ of\ \$5}{fare\ amount}
+$$
+
+**4.** It would probably be very helpful to have past tipping behavior for each customer. It would also be valuable to have accurate tip values for customers who pay with cash. It would be helpful to have a lot more data. With enough data, we could create a unique feature for each pickup/dropoff combination.
+
+
+[View Python Code](https://github.com/Anish935/Project_Portfolio/blob/main/NY%20TLC%20codes.py)
 
 
 
