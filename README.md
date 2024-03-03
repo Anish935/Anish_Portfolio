@@ -1193,6 +1193,75 @@ Notice that out of the 200+ drop-off locations, a disproportionate number of loc
 
 ### EXECUTE:
 
+**1. EDA helps a data professional to get to know the data, understand its outliers, clean its missing values, and prepare it for future modeling.**
+
+**2. Visualizations helped us understand that this dataset has some outliers that we will need to make decisions on prior to designing a model.**
+
+
+## PACE 2
+
+### PLAN: 
+
+**1. The research question for this data project: “Is there a relationship between total fare amount and payment type?”**
+
+**2. Import packages and libraries needed to compute descriptive statistics and conduct a hypothesis test.**
+
+### ANALYZE & CONSTRUCT:
+
+**1. Use descriptive statistics to conduct Exploratory Data Analysis (EDA).**
+
+In the dataset, `payment_type` is encoded in integers:
+
+*   1: Credit card
+*   2: Cash
+*   3: No charge
+*   4: Dispute
+*   5: Unknown
+
+<img width="933" alt="Screenshot 2024-03-03 at 12 38 46 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/00f4ee9b-b6f0-4912-a1fc-1059bd8bac99">
+
+We are interested in the relationship between payment type and the fare amount the customer pays. One approach is to look at the average fare amount for each payment type. 
+
+<img width="304" alt="Screenshot 2024-03-03 at 12 39 34 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/9bd220da-8d61-42e6-ab54-c27cbd48f877">
+
+Based on the averages shown, it appears that customers who pay in credit card tend to pay a larger fare amount than customers who pay in cash. However, this difference might arise from random sampling, rather than being a true difference in fare amount. To assess whether the difference is statistically significant, we conduct a hypothesis test.
+
+**2. Hypothesis Testing**
+
+**Null hypothesis**: There is no difference in average fare between customers who use credit cards and customers who use cash. 
+
+**Alternative hypothesis**: There is a difference in average fare between customers who use credit cards and customers who use cash
+
+For the purpose of this exercise, our hypothesis test is the main component of your A/B test. 
+
+$H_0$: There is no difference in the average fare amount between customers who use credit cards and customers who use cash.
+
+$H_A$: There is a difference in the average fare amount between customers who use credit cards and customers who use cash.
+
+You choose 5% as the significance level and proceed with a two-sample t-test.
+
+<img width="630" alt="Screenshot 2024-03-03 at 12 42 24 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/5d40337c-ec33-4ead-bde7-5c134d45bceb">
+
+Since the p-value is significantly smaller than the significance level of 5%, we reject the null hypothesis. 
+
+*Notice the 'e-12' at the end of the pvalue result.*
+
+We can conclude that there is a statistically significant difference in the average fare amount between customers who use credit cards and customers who use cash.
+
+### EXECUTE:
+
+**1.** The key business insight is that encouraging customers to pay with credit cards can generate more revenue for taxi cab drivers. 
+
+**2.** This project requires an assumption that passengers were forced to pay one way or the other, and that once informed of this requirement, they always complied with it. The data was not collected this way; so, an assumption had to be made to randomly group data entries to perform an A/B test. This dataset does not account for other likely explanations. For example, riders might not carry lots of cash, so it's easier to pay for longer/farther trips with a credit card. In other words, it's far more likely that fare amount determines payment type, rather than vice versa. 
+
+
+## PACE 3
+
+### PLAN:
+
+
+
+
 
 
 
