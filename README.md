@@ -1075,15 +1075,15 @@ For EDA of the data, import the data and packages that would be most helpful, su
 *    `groupby()`
 *    `sortby()`
 
-<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/ec1139d6-1c3c-474c-84f4-67d02536404f">
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/2c63fff6-7193-42b5-88b2-0b7f1b31b480">
 
 **3.** Use the size, describe, and info function to better understand the data and make sure there are no missing values 
 
-<img width="73" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/ee14ba9b-90c9-4842-b52c-5841f95b1cd1">
+<img width="440" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/440a43ef-af0a-4926-bfa4-403fb0341b0a">
 
-<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/6162c9ed-ea49-4ed9-a21c-311bf60f58e0">
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/5f9dc055-3207-47e5-9219-e40d8bdc9157">
 
-<img width="440" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/4b8d56a6-91c2-4609-8fb0-e3a2b2c45cd6">
+<img width="73" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/a987da58-47df-4888-942d-902915f58d1a">
 
 There is no missing data according to the results from the `info()` function. 
 
@@ -1105,37 +1105,37 @@ Perform a check for outliers on relevant columns such as trip distance and trip 
 
 **a)** **trip_distance**
 
-<img width="421" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/f41d0b09-a239-4093-9d93-fa0671c543de">
+<img width="421" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/aaaa12a3-c41d-4030-bc2d-e079ef0461c5">
 
-<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/59006b29-4556-4889-b672-f385ebfb73c3">
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/95e43aeb-c194-4a7f-b3ab-37e603aab7cf">
 
 The majority of trips were journeys of less than two miles. The number of trips falls away steeply as the distance traveled increases beyond two miles.
 
 **b)** **total_amount**
 
-<img width="424" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/8a73c90b-c463-4dd0-b50c-93f6d1edb806">
+<img width="424" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/bc854bda-7f89-428c-b5e6-f92073f0be04">
 
-<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/5259488d-6f48-4bf9-8e1e-4124054503e1">
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/94aef564-f3b1-4db3-aeda-bb4ce621ad81">
 
 The total cost of each trip also has a distribution that skews right, with most costs falling in the $5-15 range.
 
 **c)** **tip_amount**
 
-<img width="423" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/6cb02359-11b2-497f-85c9-e8910c3816ae">
+<img width="423" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/7ed1cc1e-16b3-4839-9807-f86153bcd472">
 
-<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/18f3a100-4cee-4cf1-baa6-f83e55ddeb2c">
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/9b9c408d-d046-4124-9630-16bd964269c0">
 
 The distribution for tip amount is right-skewed, with nearly all the tips in the $0-3 range.
 
 **d)** **tip_amount by vendor**
 
-<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/3a700b36-b5e3-4b7d-bc37-fb370d2f7628">
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/38d72fdf-be4e-4fd6-9b2e-c3698a8786fa">
 
 Separating the tip amount by vendor reveals that there are no noticeable aberrations in the distribution of tips between the two vendors in the dataset. Vendor two has a slightly higher share of the rides, and this proportion is approximately maintained for all tip amounts.
 
 Next, zoom in on the upper end of the range of tips to check whether vendor one gets noticeably more of the most generous tips.
 
-<img width="451" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/e8c2195e-db42-4ace-8faf-e1c6a2908616">
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/b36b8872-a3e4-4a2f-9003-7723395750ea">
 
 The proportions are maintained even at these higher tip amounts, with the exception being at highest extremity, but this is not noteworthy due to the low sample size at these tip amounts.
 
@@ -1143,7 +1143,7 @@ The proportions are maintained even at these higher tip amounts, with the except
 
 Examine the unique values in the `passenger_count` column.
 
-<img width="303" alt="image" src="https://github.com/Anish935/NY-TLC/assets/156449940/0f53ca8c-a61e-4056-a40d-1e97480ad52a">
+<img width="218" alt="Screenshot 2024-03-03 at 11 40 25 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/80636f77-5855-49ac-9c9b-9f8651ee6d54">
 
 Nearly two thirds of the rides were single occupancy, though there were still nearly 700 rides with as many as six passengers. Also, there are 33 rides with an occupancy count of zero, which doesn't make sense. These would likely be dropped unless a reasonable explanation can be found for them.
 
