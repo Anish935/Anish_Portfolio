@@ -61,7 +61,7 @@ To draw insights from the cleaned and organized FIFA 21 dataset, we can explore 
 - This distribution reflects typical heights for professional football players, with few players being extremely tall or short.
 
 ### 4. Weight Distribution
-<img width="522" alt="Screenshot 2024-03-04 at 10 57 00 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/76f728ea-f9ec-4e92-84e9-bdab1356f2ee">
+<img width="515" alt="Screenshot 2024-03-04 at 11 10 27 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d5629e65-cbdb-44f9-b482-cd3d4f9b686b">
 
 - Weight distribution shows a normal distribution, with most players weighing between 70 kg and 80 kg.
 - This distribution aligns with the physical demands of the sport, where a balance of strength and agility is crucial.
