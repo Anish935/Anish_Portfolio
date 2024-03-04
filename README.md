@@ -43,7 +43,7 @@ To draw insights from the cleaned and organized FIFA 21 dataset, we can explore 
 ## Results and Findings:
 
 ### 1. Age Distribution of Players:
-<img width="494" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/71e4f6d4-defb-44ed-90c6-e8667c4808e4">
+<img width="520" alt="Screenshot 2024-03-04 at 10 56 23 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/eab27aee-a284-40ef-aaec-6476a5ff7e63">
 
 - The age distribution shows a bell curve common in professional sports with most players in their early to mid-twenties.
 - There's a noticeable decline in the number of players as age increases indicating fewer older players in the game.
@@ -61,7 +61,7 @@ To draw insights from the cleaned and organized FIFA 21 dataset, we can explore 
 - This distribution reflects typical heights for professional football players, with few players being extremely tall or short.
 
 ### 4. Weight Distribution
-<img width="483" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/7cb6d16a-7edd-435f-a151-f2e00d4fac6f">
+<img width="522" alt="Screenshot 2024-03-04 at 10 57 00 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/76f728ea-f9ec-4e92-84e9-bdab1356f2ee">
 
 - Weight distribution shows a normal distribution, with most players weighing between 70 kg and 80 kg.
 - This distribution aligns with the physical demands of the sport, where a balance of strength and agility is crucial.
@@ -69,7 +69,7 @@ To draw insights from the cleaned and organized FIFA 21 dataset, we can explore 
 These insights provide a basic understanding of the demographics, physical attributes, and skill levels of players in FIFA 21. Let us next explore a more in-depth analysis of the data set and the insights it provides us with!!
 
 ### 5. Value vs Wage
-<img width="468" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/217e3cf1-3f39-4fd6-bec7-1ec8a0926ad9">
+<img width="508" alt="Screenshot 2024-03-04 at 10 57 29 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/24eb7877-45fc-448d-a2ed-e13602db3a53">
 
 The scatter plot illustrates the relationship between a player's overall rating, their release clause, and their wage in FIFA 21. Here are some key insights:
 - **Overall Rating and Economic Value**: There's a clear positive correlation between a player's overall rating and their economic value (both release clause and wage). Players with higher overall ratings tend to have higher release clauses and wages.
@@ -79,7 +79,7 @@ The scatter plot illustrates the relationship between a player's overall rating,
 - **Logarithmic Scale**: The use of a logarithmic scale for the release clause highlights the exponential increase in a player's value with higher skill levels, emphasizing how elite players are valued disproportionately higher than their peers.
 
 ### 6. Position-specific Analysis 
-<img width="482" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/2449c5bd-1ae0-4525-8d5a-c97432e4aafd">
+<img width="504" alt="Screenshot 2024-03-04 at 10 58 15 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/75e09b96-378a-4c03-a696-c9577c34a220">
 
 - Typically, attacking positions (like strikers and wingers) may have higher average ratings, reflecting the premium on goal-scoring abilities in football.
 - Defensive positions might have lower average ratings but could excel in specific attributes like physicality or defense.
