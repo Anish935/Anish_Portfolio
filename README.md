@@ -85,7 +85,7 @@ The scatter plot illustrates the relationship between a player's overall rating,
 - Defensive positions might have lower average ratings but could excel in specific attributes like physicality or defense.
 
 ### 7. Age vs Performance 
-<img width="483" alt="image" src="https://github.com/Anish935/Anish_Portfolio/assets/156449940/19dd8f6b-6bf2-4e9a-9d00-abc82aedc072">
+<img width="480" alt="Screenshot 2024-03-05 at 12 51 34 PM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/01c27b4e-004c-411f-8229-5178b49b31c1">
 
 - Players generally peak between the ages of 27 and 32, with a gradual decline afterward.
 - Young players (under 21) often have high potential ratings, indicating their future growth in the game.
