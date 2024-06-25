@@ -1889,7 +1889,8 @@ The increasing importance of connectivity justifies the importance of “wireles
 
 The study resulted in identifying the most important variables in predicting Airbnb prices, while acknowledging limitations such as regionality, data scope, temporality, and feature incompleteness of some key variables that influence price such as aesthetic appeal and neighborhood of the listing. Future research can implement real-time market trends and optimize models for transferability between regions. The practical implications suggest focusing on listing size and host credibility to optimize pricing strategies. The study's significance lies in its potential to enhance revenue for hosts and Airbnb, reinforcing the platform's competitive stance in the hospitality sector through data-driven decision-making. This understanding of price predictors, derived from machine learning insights, can inform both strategic decisions at the platform level and operational decisions at the individual host level.
 
-**add code**
+[View R Code](https://github.com/Anish935/Project_Portfolio/blob/main/Airbnb%20Code.R)
+
 
 
 
