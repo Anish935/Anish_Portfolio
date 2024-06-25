@@ -1686,6 +1686,241 @@ The model is almost twice as likely to predict a false positive than it is to pr
 
 
 
+# 5. Airbnb Price Prediction
+
+## Introduction 
+In just 11 years, Airbnb has grown from nothing to a $30 billion firm, with over half a billion people resting their heads in an Airbnb property each night. They currently host over 7 million listings across 100,000 cities in 220 countries and regions. In this vast market of accommodation and short-term rentals, accurately predicting rental prices has become increasingly important for platforms such as Airbnb. This ability to set competitive, yet profitable prices is not only beneficial to the hosts in generating revenue, but also the business as it enables Airbnb to obtain a clearer understanding of their price dynamics, improve their strategic decision-making,  and increase their global market share.
+
+## Background 
+Airbnb operates on a sharing-economy platform, however, unlike other firms operating on this platform such as Uber or Lyft, Airbnb allows the individual hosts to set their price, and offers them an algorithm tool for price suggestions. Pricing has been one of the biggest challenges for Airbnb and it has been identified that Airbnb hosts forfeit around 46% of the revenue they should be earning due to imperfect pricing strategy. 
+
+## Data Description and Cleaning
+The Airbnb Manchester 2018 data set will be used for analysis and it contains a wide range of comprehensive variables that play a role in understanding the price set for the rentals. There are 3272 observations along with 27 different variables across the data set. R Studio will be used for the analysis of this data set. Let us look at the classification of the variables and their types using a table. 
+
+**1. Variable Classification**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d9266929-7201-4518-bb3f-92fb6e33190f">
+
+**2. Limitations of Data Set**
+
+**Sample Bias**: Since the data only encompasses the listings in Manchester, it might not provide the most accurate results in predicting prices for listings in other areas indicating that it could geographically skewed. 
+
+**Time Dynamics**: Since the data only covers the information from 2018, the model generated might prove inadequate in generating the best predictions for periods later due to changes in housing price dynamics, and economic instability. 
+
+**External Factors**: The data does not capture the metrics of external variables including, policies, regulatory changes, and political conditions. 
+
+**3. Data Cleaning**
+
+**Boxplot of Price**
+
+<img width="299" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/1e7d9766-3f87-4d17-8c3d-f57b139b44ba">
+
+We can clearly see an outlier in our dependent variable price at $11,900, and hence it is important to eliminate this outlier before our analysis to avoid inaccurate results.
+
+**Boxplot of Price ≤ 4000**
+
+<img width="310" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/6826d11e-be71-4883-b18a-f820ac173f82">
+
+The above plot displays that we have successfully eliminated our outlier and completed the cleaning process, and the data is now ready for analysis.
+
+## Exploratory Analysis
+
+**1. Superhost vs Price**
+
+<img width="297" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/4c5b74e3-9131-4993-8967-d1e3af553fdc">
+
+The boxplot analysis shows that super hosts (1) charge lower prices than normal hosts (0) despite higher reviews and more listings, likely aiming to increase booking volume and maintain high occupancy rates. In contrast, normal hosts, with fewer listings and lower review scores, charge more to compensate for less frequent bookings.
+
+**2. Overall Rating and Reviews Per Year vs Price**
+
+<img width="454" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/4ec3c773-3be6-492e-b05e-15632da5e08b">
+
+The above analysis shows that hosts with a higher overall rating of more than 80 charge more, consistent with our expectations, however, hosts with fewer reviews (0-25) charge higher prices as they might not rent out frequently. This highlights the need for using log transformations of prices to address skewed data and extreme values for clearer insights.
+
+**3. Distance vs Price**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/518d790f-feae-47d5-8e1e-e0d336098a71">
+
+The above graph uses the log(price) to display a clearer understanding of the relationship between price and distance. It is evident by the graph that the majority of the Airbnb rentals are done closer to the city center and possess a higher average price due to their high demand compared to those further away as fewer people would prefer not to rent them leading to lower average prices.
+
+**4. Relevant Variables vs Price**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/ce7d1985-c020-4645-b836-876e57a0d36a">
+
+Log(price) enables generating clear plots with a linear function line. The 4 variables all have a positive correlation with price. Accommodations for 2-6 guests, properties with 1-2 bedrooms, and 1-2 bathroom are most common, indicating a focus on individuals and small groups. Hosts with 1-5 listings typically charge lower prices and rent out more frequently, while those with higher listings, likely professional managers, demand higher prices. These variables will be further analysed while building our model to understand their importance in predicting price. 
+
+## Methodology 
+
+**1. Variable Sets**
+
+4 variable sets are created to ensure evenly spread out data. 
+
+**Variable Set 1**: super host, host listings, host identity, distance, type_1, type_2, type_3, type_4 
+
+**Variable Set 2**: entire home, private room, shared room, accommodates 
+
+**Variable Set 3**: bathrooms, bedrooms, real bed, wireless, breakfast 
+
+**Variable Set 4**: instant bookable, cancellation policy, smoking, guest profile, guest phone, reviews per year, overall rating 
+
+**2. Model Generation**
+
+4 conditional regression tree models will be generated to identify the most important variable in predicting price. In order to develop a more trustworthy model less sensitive to the variables used and combat the limitations of Regression Trees, we will use Random Forest as our next ML model. Random Forest generates a very large number of regression trees and averages out all the predictions to improve accuracy of the results.
+
+**3. Model Selection**
+
+**a)** A 10-fold cross-validation approach will be utilized, segmenting the dataset into ten parts to train the model ten times—each instance using nine parts for training and one part for testing.
+
+**b)** The trained models for each of the four formulas (formula 1, 2, 3, and 4) will be stored in a list named ‘models’ through iterative training.
+
+**c)** Upon completing all iterations, the performance of each model will be evaluated and summarized to identify the most effective formula for the dataset.
+
+## Results
+
+**1. Algorithm for Formula**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/20339026-5473-4aa4-86cd-ea5f654522e0">
+
+**2. Conditional Regression Trees**
+
+**a) Regression Tree - Formula 1**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/8b0d3aa5-2776-4d12-8841-d392085ce3b1">
+
+**b) Regression Tree - Formula 2**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/5a9bf0e2-4e67-4950-b99a-721af0189c9b">
+
+The max depth for the above tree is set to 3 to generate a simple understanding of the model. The variable “accommodates” is shown as the main predictor of price. Following from 1 to 10, an Airbnb which can accommodate greater than 8 people but lesser than 10 people has 91 observations in the data set, and an average price of $206.57, which is also used as the predicted price for any observation in this range.
+
+**c) Regression Tree - Formula 3**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/cb56f595-c068-4904-87b8-be7c7cec45af">
+
+A max depth was not set to see the extent of the tree, and it ranks “accommodates” the best predictor of price with a depth of 6.
+
+**d) Regression Tree - Formula 4**
+
+<img width="451" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/3cb8b73b-404f-48e9-9b21-5a8aa53b0450">
+
+The above regression tree model is a composite of all the variable sets indicating that the model finds “accommodates” as the most important predictor of price in our data set. A max depth of 5 is set in order to avoid overfitting of the data and maintain the accuracy of the model. This result is consistent with the results generated by the model using Formula 2 & 3 which both include the “accommodates” variable and rank it the highest.
+
+**3. Random Forest**
+
+We first set the seed to 100 across all models in order to ensure reproducibility and that our code runs the same every time. Furthermore, this helps in comparison as it ensures no result is due to random chance or error. 
+
+**a) Random Forest Model - Formula 1**
+
+*Ntree = Min(100): Sets and generates a min of 100 regression trees*
+
+<img width="507" alt="Screenshot 2024-06-25 at 11 04 30 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/0ecadf98-4215-472f-a305-7ad6acbca54f">
+
+The above plot indicates that the model found the “host listing” variable to be the most important predictor of price and its percentage of mean-squared error indicates the decrease in accuracy of model (1.91) if this variable will not be included. 
+
+This value is generated when the model keeps the values of the other 7 variables in the variable set constant and randomly changes the values of the “host listing” data set to measure its impact on the accuracy of the prediction. 
+
+*Ntree = Min(1000): Sets and generates  a min of 1000 regression trees*
+
+<img width="529" alt="Screenshot 2024-06-25 at 11 06 32 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/e4b28c41-9e68-4d20-a6e6-45c84b510396">
+
+The above plot indicates that “type 3” is a more accurate predictor of price as more trees are generated and has a higher % of increase in MSE (4.85%), which shows the fall in accuracy of model if this variable is removed.
+
+*Difference in Error Graph of Ntree Min(100) & Ntree Min(1000)*
+
+<img width="508" alt="Screenshot 2024-06-25 at 11 07 56 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/940cc9eb-5623-4922-b4f4-cf18cf8bed2c">
+
+The error graph also indicates that setting more than 40 trees does not affect the accuracy of the model regardless of the higher Ntree number we input, indicating that this is the extent of Model 1’s accuracy. The Error graph generated using a minimum of 1000 regression trees on the right-hand side is a justification of this statement. 
+
+**b) Random Forest Model - Formula 2**
+
+*Variable Importance Plot Model 2 - Ntree Min(500)*
+
+<img width="552" alt="Screenshot 2024-06-25 at 11 15 14 AM" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/c5337e86-7da6-4d56-9fab-a85f675940c3">
+
+The above figure indicates the variable importance and the error plot for formula 2 which consists of variable set 1 and 2. “accommodates” is the variable with the highest percentage increase of MSE (5.96%), however, “distance” also has a % increase in MSE of 4.6% making it an important predictor of price along with the number of people the rental can accommodate. when the number of minimum trees is set to 500, the error plot indicates that trees generated beyond 100 do not have any impact on the accuracy of the model indicated by the model.rf plot on the right-hand side.
+
+**c) Random Forest Model - Formula 3**
+
+*Variable Importance Plot Model 3 - Ntree Min(1500)*
+
+<img width="493" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/3c350927-b10f-49de-b2f8-30886ca55201">
+
+The above figure shows the Variable Importance plot of Model/Formula 3. “accommodates” has the highest percentage increase in MSE of 11% indicating that 11% of the model accuracy will be lost without including this variable, showcasing the value this variable holds in predicting price. “bedrooms” finishes on a close second at 10.06%.
+
+**d) Random Forest Model - Formula 4**
+
+*Variable Importance Plot Model 4 - Ntree Min(3000)*
+
+<img width="470" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/d141412e-58a8-4696-9898-3fb02c012f45">
+
+Formula 4 containing all the variable sets is used to generate the Random Forest Model 4. The variable importance indicates the “accommodates” is the best predictor of price in our data set with a % increase in MSE of 56.7%. This implies that more than half the accuracy of the model will be lost without including this variable indicating the importance of the role the number of people a rental can accommodate is in predicting its price.
+
+Both regression trees and random forest estimated “Accommodates” as the most important variable in predicting price. Random forest typically amplifies the predictive indicators found in individual trees. If a variable is consistently the best splitter in individual regression trees, it will likely emerge as important in the random forest model as well.
+
+## Discussions 
+
+**1. Model Selection**
+
+**Cross Validation Results**
+
+<img width="505" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/45befce7-5a84-424d-8ea7-95f491a803a4">
+
+The above figure indicates the performance of each model on 3 different metrics, enabling us to choose the best model based on their results in the cross-validation process.
+
+**a) R-Squared:** Higher value implies that a model explains a greater proportion of variance. All the models perform quite similarly; however, Model 1 seems to have a slight edge over the others. 
+
+**b) Mean Absolute Error (MAE):** Model 3 & 4 have a smaller MAE indicating that on average these models generate lesser errors while predicting price. 
+
+**c) Root Mean Square Error (RMSE):** RMSE is the square root of the average of squared differences between prediction and actual observation. Model 3 appears to have the lowest RMSE. 
+
+## Conclusion
+
+The cross-validation concludes that Model 3 has the best accuracy in predicting price. It consists of Variable Set 1,2 and 3 and the variable importance ranking of the top 5 variables is given below. 
+
+**Model 3 Variable Ranking**
+
+<img width="358" alt="image" src="https://github.com/Anish935/Project_Portfolio/assets/156449940/bd165b3f-5902-414c-abf0-b2a0e8da4ec2">
+
+The number of people a listing can hold and the bedrooms it has are the most important in customer choice and willingness to pay. A study in 2015 concluded that not all amenities have equal influence on pricing and that the price of the rental heavily relies on its capacity.  It also claimed that some variables have the opposite effect wherein their inclusivity does not affect the price perceived by the customer. Evidence of this is the negative % increase in MSE value (-1.8%) held by “breakfast”, showcasing that guests do not consider breakfast as a significant value add.
+
+A study in 2016 revealed a significant positive relationship in the perceived trustworthiness of the host according to their photo on the listing price. An increase in one unit in visual based trust led to a 7% increase in price of the listing, confirming the importance of “host_identity” in predicting price. It also revealed a positive relationship in the apartment size - number of bedrooms. Hence, Airbnb should make the hosts aware of these metrics to increase their revenue. 
+
+The increasing importance of connectivity justifies the importance of “wireless” in predicting price as customer view this as a necessity rather than a luxury increasing their willingness to pay. A more in-depth understanding of the variables with less variable importance is important for the hosts to avoid unnecessary investments and reduce costs to maximise profit. 
+
+The study resulted in identifying the most important variables in predicting Airbnb prices, while acknowledging limitations such as regionality, data scope, temporality, and feature incompleteness of some key variables that influence price such as aesthetic appeal and neighborhood of the listing. Future research can implement real-time market trends and optimize models for transferability between regions. The practical implications suggest focusing on listing size and host credibility to optimize pricing strategies. The study's significance lies in its potential to enhance revenue for hosts and Airbnb, reinforcing the platform's competitive stance in the hospitality sector through data-driven decision-making. This understanding of price predictors, derived from machine learning insights, can inform both strategic decisions at the platform level and operational decisions at the individual host level.
+
+**add code**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
